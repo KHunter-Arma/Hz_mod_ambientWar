@@ -18,7 +18,7 @@ class cfgPatches {
     url = "https://github.com/KHunter-Arma";
     
     requiredVersion = 1.58; 
-    requiredAddons[] = {"A3_Modules_F"};
+    requiredAddons[] = {"A3_Modules_F","Extended_Eventhandlers"};
     units[] = {"Hz_mod_ambientWar_module"};
     weapons[] = {};
     
@@ -123,7 +123,7 @@ class CfgVehicles
 			
 			
 			
-      class ModuleDescription: ModuleDescription{}; // Module description should be shown last
+      class ModuleDescription: ModuleDescription {}; // Module description should be shown last
     };
 
     // Module description. Must inherit from base class, otherwise pre-defined entities won't be available
@@ -134,4 +134,16 @@ class CfgVehicles
 
     };
   };
+};
+
+class Extended_Killed_EventHandlers {
+		
+	class CAManBase {		
+
+		class Hz_ambw_EH_unitDead {
+			
+			serverKilled = "_this call Hz_ambw_fnc_unitHandleKilled;";
+			
+		};
+	};
 };

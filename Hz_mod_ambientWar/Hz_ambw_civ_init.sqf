@@ -9,11 +9,10 @@
 * https://creativecommons.org/licenses/by-nc-sa/4.0/
 *******************************************************************************/
 
-#define PATH ""
 
 //compile functions and init global vars
-Hz_ambw_civ_fnc_spawnCivs = compile preprocessFileLineNumbers (PATH+"fnc\Hz_ambw_civ_fnc_spawnCivs.sqf");
-Hz_ambw_civ_fnc_despawnCivs = compile preprocessFileLineNumbers (PATH+"fnc\Hz_ambw_civ_fnc_despawnCivs.sqf");
+Hz_ambw_civ_fnc_spawnCivs = compile preprocessFileLineNumbers (Hz_ambw_path+"fnc\Hz_ambw_civ_fnc_spawnCivs.sqf");
+Hz_ambw_civ_fnc_despawnCivs = compile preprocessFileLineNumbers (Hz_ambw_path+"fnc\Hz_ambw_civ_fnc_despawnCivs.sqf");
 Hz_ambw_civGlobalMutexUnlocked = true;
 Hz_ambw_currentNumberOfCiviliansSpawned = 0;
 civ_killed_count = 0;
