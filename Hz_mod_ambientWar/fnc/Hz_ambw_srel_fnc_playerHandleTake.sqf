@@ -8,7 +8,7 @@
 * together with this file or visit:
 * https://creativecommons.org/licenses/by-nc-sa/4.0/
 *******************************************************************************/
-private ["_player", "_container", "_item", "_playerSideFaction", "_killer", "_playerSide", "_playerFaction", "_unit", "_isWeapon", "_temp", "_nearBodies", "_weapons", "_attachments", "_unitSideFaction", "_unitSide", "_unitFaction", "_unitImportance"];
+private ["_containerType", "_player", "_container", "_item", "_playerSideFaction", "_killer", "_playerSide", "_playerFaction", "_unit", "_isWeapon", "_temp", "_nearBodies", "_weapons", "_attachments", "_unitSideFaction", "_unitSide", "_unitFaction", "_unitImportance"];
 
 _player = _this select 0;
 _container = _this select 1;
@@ -74,12 +74,70 @@ if (_container isKindOf "CAManBase") then {
 				};
 			
 			};
+			
+			if (!isNull _unit) exitWith {};
 		
 		} foreach _nearBodies;
+	
+	} else {
+	
+		_containerType = toLower (typeof _container);
+		
+		//strange notation but uniform and vest on dead soldier apparently has Supply40 and Supply120 as type...
+		
+		if ((_containerType == "supply40") || (_containerType == "supply120")) then {
+		
+			_temp = nearestObjects [_container, ["CAManBase"],0.5];
+			_nearBodies = [];
+		
+			{
+			
+				if (!alive _x) then {
+				
+					_nearBodies pushBack _x;
+				
+				};
+			
+			} foreach _temp;
+			
+			if ((count _nearBodies) > 0) then {
+			
+				_unit = _nearBodies select 0;
+			
+			};
+			
+		} else {
+		
+			if (_container isKindOf "Bag_base") then {
+			
+				_temp = nearestObjects [_container, ["CAManBase"],0.5];
+				_nearBodies = [];
+			
+				{
+				
+					if (!alive _x) then {
+					
+						_nearBodies pushBack _x;
+					
+					};
+				
+				} foreach _temp;
+				
+				if ((count _nearBodies) > 0) then {
+				
+					_unit = _nearBodies select 0;
+				
+				};
+			
+			};
+		
+		};
 	
 	};
 
 };
+
+if (isNull _unit) exitWith {};
 
 _unitSideFaction = _unit call Hz_ambw_srel_fnc_getUnitSideFaction;
 _unitSide = _unitSideFaction select 0;
