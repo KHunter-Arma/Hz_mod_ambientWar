@@ -62,10 +62,12 @@ if (!isnil "_playerSideFaction") then {
 } else {
 
 	private _configFaction = toupper (faction _killer);
+	private _element = [];
 
 	{
+		_element = _x;
 		
-		private _factionClasses = _x select 3;
+		private _factionClasses = _x select 2;
 
 		if (_configFaction in _factionClasses) then {
 
@@ -77,7 +79,7 @@ if (!isnil "_playerSideFaction") then {
 			
 				if (_killer iskindof _x) exitWith {
 				
-					_playerFaction = _x select 0;
+					_playerFaction = _element select 0;
 				
 				};
 			
@@ -115,8 +117,11 @@ if (!isnil "_unitSideFaction") then {
 } else {
 
 	private _configFaction = toupper (faction _unit);
+	private _element = [];
 
 	{
+		
+		_element = _x;
 		
 		private _factionClasses = _x select 3;
 
@@ -130,7 +135,7 @@ if (!isnil "_unitSideFaction") then {
 			
 				if (_unit iskindof _x) exitWith {
 				
-					_unitFaction = _x select 0;
+					_unitFaction = _element select 0;
 				
 				};
 			
@@ -145,7 +150,7 @@ if (!isnil "_unitSideFaction") then {
 		
 		};
 
-	} foreach Hz_ambw_srel_playerfactions;
+	} foreach Hz_ambw_srel_AIfactions;
 
 };
 
@@ -157,6 +162,19 @@ if (_unitFaction == "") exitWith {
 
 if ([_unitSide,_playerSide] call Hz_ambw_fnc_areEnemies) exitWith {};
 
+private _exit = false;
+
+if (_unitSide == civilian) then {
+
+	if (((primaryWeapon _unit) != "") || ((secondaryWeapon _unit) != "") || ((handgunWeapon _unit) != "")) then {
+	
+		_exit = true;
+	
+	};
+
+};
+
+if (_exit) exitWith {};
 
 // global event
 [_unit,_unitImportance,_unitSide,_unitFaction,_playerSide,_playerFaction] remoteExecCall ["Hz_ambw_srel_fnc_broadcastUnitKilled",0,false];

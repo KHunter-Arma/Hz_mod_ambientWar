@@ -23,9 +23,9 @@ if (isServer) then {
 	
 		Hz_ambw_srel_relationsCivilian = Hz_ambw_srel_relationsCivilian - (Hz_ambw_srel_relationsPenaltyPerKill*_unitImportance);
 		
-		if (Hz_ambw_srel_relationsCivilian < 0) then {
+		if (Hz_ambw_srel_relationsCivilian < 1) then {
 		
-			Hz_ambw_srel_relationsCivilian = 0;
+			Hz_ambw_srel_relationsCivilian = 1;
 		
 		};
 		
@@ -37,9 +37,9 @@ if (isServer) then {
 	
 		Hz_ambw_srel_relationsOwnSide = Hz_ambw_srel_relationsOwnSide - (Hz_ambw_srel_relationsPenaltyPerKill*_unitImportance);
 		
-		if (Hz_ambw_srel_relationsOwnSide < 0) then {
+		if (Hz_ambw_srel_relationsOwnSide < 1) then {
 		
-			Hz_ambw_srel_relationsOwnSide = 0;
+			Hz_ambw_srel_relationsOwnSide = 1;
 		
 		};
 		

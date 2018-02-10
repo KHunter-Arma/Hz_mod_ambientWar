@@ -14,8 +14,11 @@ if (!isServer) exitWith {};
 //compile functions and init global vars
 Hz_ambw_civ_fnc_spawnCivs = compile preprocessFileLineNumbers (Hz_ambw_functionsPath+"Hz_ambw_civ_fnc_spawnCivs.sqf");
 Hz_ambw_civ_fnc_despawnCivs = compile preprocessFileLineNumbers (Hz_ambw_functionsPath+"Hz_ambw_civ_fnc_despawnCivs.sqf");
+Hz_ambw_civ_suicideBomber = compile preprocessFileLineNumbers (Hz_ambw_path+"scripts\Hz_ambw_civ_suicideBomber.sqf");
+Hz_ambw_civ_sinisterCiv = compile preprocessFileLineNumbers (Hz_ambw_path+"scripts\Hz_ambw_civ_sinisterCiv.sqf");
 Hz_ambw_civGlobalMutexUnlocked = true;
 Hz_ambw_currentNumberOfCiviliansSpawned = 0;
+Hz_ambw_civ_debug = false;
 
 // ==========================================================================
 //                                PARAMETERS

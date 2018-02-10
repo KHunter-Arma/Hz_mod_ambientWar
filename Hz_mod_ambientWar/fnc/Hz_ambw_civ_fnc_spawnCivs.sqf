@@ -250,7 +250,7 @@ for "_i" from 1 to _num do {
 		
 			_civ setskill 1;
 			_civ addMagazine "IEDUrbanBig_Remote_Mag";
-			[_civ,[Hz_ambw_armedCivilianTargetSide],"IEDUrbanBig_Remote_Ammo",Hz_ambw_armedCivilianSide] execVM "suicideBomber.sqf";
+			[_civ,[Hz_ambw_armedCivilianTargetSide],"IEDUrbanBig_Remote_Ammo",Hz_ambw_armedCivilianSide] spawn Hz_ambw_civ_suicideBomber;
         
 			_civ setunitpos "UP";
         
@@ -269,12 +269,10 @@ for "_i" from 1 to _num do {
 			
 			} foreach Hz_ambw_civ_loadouts;
 			
-			[_civ,Hz_ambw_armedCivilianSide, Hz_ambw_armedCivilianTargetSide] spawn Hz_sinisterCiv; 
+			[_civ,Hz_ambw_armedCivilianSide, Hz_ambw_armedCivilianTargetSide] spawn Hz_ambw_civ_sinisterCiv; 
 		
 		};
 			
-	};		
-		
 	} else {
     
     _civtype = selectRandom Hz_ambw_allCivTypes;

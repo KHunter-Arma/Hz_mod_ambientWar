@@ -136,6 +136,20 @@ class CfgVehicles
   };
 };
 
+class Extended_InitPost_EventHandlers
+{
+		
+			class Civilian {		
+
+        class RemoveItems {
+          
+          init = "(_this select 0) unassignItem 'ItemMap'; (_this select 0) removeItem 'ItemMap'; (_this select 0) unassignItem 'ItemCompass'; (_this select 0) removeItem 'ItemCompass';";
+          
+        };
+			};
+			
+};
+
 class Extended_Killed_EventHandlers {
 		
 	class CAManBase {		
