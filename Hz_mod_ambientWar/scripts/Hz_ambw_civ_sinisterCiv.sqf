@@ -15,6 +15,7 @@ sleep 1;
 while {alive _civ} do {
 
   _civ setCaptive true;
+	_civ setVariable ["Hz_ambw_sideFaction",[civilian,"Civilians"]];
 	
 	//apparently we need something like this in Arma 3 to force him to holster weapon...
 	_civ action ['SwitchWeapon', _civ, _civ, -1];
@@ -32,6 +33,7 @@ while {alive _civ} do {
   sleep (random 10);
 	
 	_civ setCaptive false;
+	_civ setVariable ["Hz_ambw_sideFaction",[_side,"Civilians"]];
 	
 	if ((random 1) < 0.75) then {
 	

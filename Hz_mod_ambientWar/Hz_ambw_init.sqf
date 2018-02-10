@@ -15,6 +15,12 @@ Hz_ambw_initDone = false;
 
 Hz_ambw_functionsPath = Hz_ambw_path + "fnc\";
 
+if (is3DEN) then {
+
+	waitUntil {sleep 2; !is3DEN};
+
+};
+
 _this call compile preprocessFileLineNumbers (Hz_ambw_path + "Hz_ambw_srel_init.sqf");
 _this call compile preprocessFileLineNumbers (Hz_ambw_path + "Hz_ambw_civ_init.sqf");
 
