@@ -9,17 +9,6 @@
 * https://creativecommons.org/licenses/by-nc-sa/4.0/
 *******************************************************************************/
 
-
-
-/*
-!!!!Execute upon both activation and deactivation!!!!
-*/
-
-//If trigger will stay switched on for an extended period of time, might need an external script to monitor if all civs are still alive and update Hz_ambw_currentNumberOfCiviliansSpawned.
-
-#define SAFE_DISTANCE_FOR_SPAWN 300
-#define CIV_KILLED_COUNT_BEFORE_RAGE 5000 //deprecated for now so keep it too high
-
 	//#define playableunits switchableunits
 
 	if (Hz_ambw_civ_debug) exitWith {_this spawn Hz_ambw_civ_fnc_despawnCivs;};

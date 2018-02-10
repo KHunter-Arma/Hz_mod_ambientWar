@@ -9,20 +9,22 @@
 * https://creativecommons.org/licenses/by-nc-sa/4.0/
 *******************************************************************************/
 
+if (!isServer) exitWith {};
 
 //compile functions and init global vars
-Hz_ambw_civ_fnc_spawnCivs = compile preprocessFileLineNumbers (Hz_ambw_path+"fnc\Hz_ambw_civ_fnc_spawnCivs.sqf");
-Hz_ambw_civ_fnc_despawnCivs = compile preprocessFileLineNumbers (Hz_ambw_path+"fnc\Hz_ambw_civ_fnc_despawnCivs.sqf");
+Hz_ambw_civ_fnc_spawnCivs = compile preprocessFileLineNumbers (Hz_ambw_functionsPath+"Hz_ambw_civ_fnc_spawnCivs.sqf");
+Hz_ambw_civ_fnc_despawnCivs = compile preprocessFileLineNumbers (Hz_ambw_functionsPath+"Hz_ambw_civ_fnc_despawnCivs.sqf");
 Hz_ambw_civGlobalMutexUnlocked = true;
 Hz_ambw_currentNumberOfCiviliansSpawned = 0;
-civ_killed_count = 0;
 
 // ==========================================================================
 //                                PARAMETERS
 // ==========================================================================
 
 Hz_ambw_maxNumberOfCivs = 60;
-Hz_ambw_hostileCivRatio = 0.1;
+
+Hz_ambw_hostileCivRatioStarting = 0.1;
+Hz_ambw_hostileCivRatio = Hz_ambw_hostileCivRatioStarting;
 
 Hz_ambw_armedCivilianSide = east;
 Hz_ambw_armedCivilianTargetSide = west;
@@ -40,9 +42,17 @@ Hz_ambw_enableClientProcessing = false;
 //increase multiplier to increase number of civs per area
 Hz_ambw_spawnCivilianCountMultiplier = 0.75;
 
-// ==========================================================================
-// ==========================================================================
+Hz_ambw_civ_suicideBomberProbability = 0.05;
 
+Hz_ambw_civ_loadouts = [
+
+[0.45, "CUP_hgun_Makarov", "CUP_8Rnd_9x18_Makarov_M", 8],
+[1, "CUP_hgun_TaurusTracker455", "CUP_6Rnd_45ACP_M", 8]
+
+];
+
+// ==========================================================================
+// ==========================================================================
 
 Hz_ambw_civ_initDone = true;
 if (Hz_ambw_civ_debug) then {[-1, {hint"Hunter'z Civilian Module initialised!";}] call CBA_fnc_globalExecute;};
