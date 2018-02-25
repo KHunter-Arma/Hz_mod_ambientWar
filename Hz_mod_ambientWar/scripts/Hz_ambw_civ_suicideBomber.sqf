@@ -46,7 +46,7 @@ while {alive _bomber && !_exit} do
         _bomberSide = _this select 2;
         dostop _bomber;
 				
-				[_bomber,"shout"] remoteExecCall ["say3D",0,false];
+				[_bomber,"Hz_ambw_shout"] remoteExecCall ["say3D",0,false];
 				
 				_bomber playMoveNow "AmovPercMstpSsurWnonDnon";
 				

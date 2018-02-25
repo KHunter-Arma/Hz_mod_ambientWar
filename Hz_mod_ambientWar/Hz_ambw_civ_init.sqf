@@ -11,6 +11,8 @@
 
 if (!isServer) exitWith {};
 
+_moduleLogic = _this select 0;
+
 //compile functions and init global vars
 Hz_ambw_civ_fnc_spawnCivs = compile preprocessFileLineNumbers (Hz_ambw_functionsPath+"Hz_ambw_civ_fnc_spawnCivs.sqf");
 Hz_ambw_civ_fnc_despawnCivs = compile preprocessFileLineNumbers (Hz_ambw_functionsPath+"Hz_ambw_civ_fnc_despawnCivs.sqf");
@@ -24,17 +26,17 @@ Hz_ambw_civ_debug = false;
 //                                PARAMETERS
 // ==========================================================================
 
-Hz_ambw_maxNumberOfCivs = 60;
+Hz_ambw_maxNumberOfCivs = call compile (_moduleLogic getVariable "MaxCivCount");
 
-Hz_ambw_hostileCivRatioStarting = 0.1;
+Hz_ambw_hostileCivRatioStarting = call compile (_moduleLogic getVariable "HostileCivRatio");
 Hz_ambw_hostileCivRatio = Hz_ambw_hostileCivRatioStarting;
 
-Hz_ambw_armedCivilianSide = east;
-Hz_ambw_armedCivilianTargetSide = west;
+Hz_ambw_armedCivilianSide = call compile (_moduleLogic getVariable "ArmedCivilianSide");
+Hz_ambw_armedCivilianTargetSide = call compile (_moduleLogic getVariable "ArmedCivilianTargetSide");
 
-Hz_ambw_allCivTypes = ["C_journalist_F","C_Journalist_01_War_F","C_man_p_beggar_F","LOP_Tak_Civ_Random","LOP_Tak_Civ_Random","LOP_Tak_Civ_Random","LOP_Tak_Civ_Random","C_man_p_beggar_F","LOP_Tak_Civ_Random","LOP_Tak_Civ_Random","LOP_Tak_Civ_Random","LOP_Tak_Civ_Random"];
+Hz_ambw_allCivTypes = call compile (_moduleLogic getVariable "CivTypes");
 
-Hz_ambw_hostileCivTypes = ["C_man_p_beggar_F","LOP_Tak_Civ_Random","LOP_Tak_Civ_Random","LOP_Tak_Civ_Random","LOP_Tak_Civ_Random"];
+Hz_ambw_hostileCivTypes = call compile (_moduleLogic getVariable "HostileCivTypes");
 
 // If enabled, multiple triggers won't be able to spawn civilians at exactly the same time. Could be useful if your triggers are all meshed up into each other and you drive fast...
 Hz_ambw_civ_forceGlobalMutex = false;
@@ -43,16 +45,11 @@ Hz_ambw_civ_forceGlobalMutex = false;
 Hz_ambw_enableClientProcessing = false;
 
 //increase multiplier to increase number of civs per area
-Hz_ambw_spawnCivilianCountMultiplier = 0.75;
+Hz_ambw_spawnCivilianCountMultiplier = call compile (_moduleLogic getVariable "CivilianMultiplier");
 
-Hz_ambw_civ_suicideBomberProbability = 0.05;
+Hz_ambw_civ_suicideBomberProbability = call compile (_moduleLogic getVariable "SuicideBomberProbability");
 
-Hz_ambw_civ_loadouts = [
-
-[0.45, "CUP_hgun_Makarov", "CUP_8Rnd_9x18_Makarov_M", 8],
-[1, "CUP_hgun_TaurusTracker455", "CUP_6Rnd_45ACP_M", 8]
-
-];
+Hz_ambw_civ_loadouts = call compile (_moduleLogic getVariable "CivilianLoadouts");
 
 // ==========================================================================
 // ==========================================================================
