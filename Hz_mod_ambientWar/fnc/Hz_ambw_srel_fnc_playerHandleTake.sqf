@@ -139,6 +139,8 @@ if (_container isKindOf "CAManBase") then {
 
 if (isNull _unit) exitWith {};
 
+if (_unit getVariable ["Hz_ambw_disableSideRelations",false]) exitWith {};
+
 _unitSideFaction = _unit call Hz_ambw_srel_fnc_getUnitSideFaction;
 _unitSide = _unitSideFaction select 0;
 _unitFaction = _unitSideFaction select 1;

@@ -12,8 +12,6 @@
 private _unit = _this select 0;
 private _killer = _this select 1;
 
-if (isPlayer _unit) exitWith {};
-
 if (_unit getVariable ["Hz_ambw_disableSideRelations",false]) exitWith {};
 
 // for now this isn't handled -- maybe in future handling death from bleeding from ACE medical after being hit can be implemented...
@@ -26,6 +24,8 @@ if (isplayer _killer) then {
 	_killedByPlayer = true;
 
 } else {
+
+	if ((vehicle _unit) != _unit) exitWith {};
 	
 	//hit and run detection
 	if (_unit == _killer) then {
