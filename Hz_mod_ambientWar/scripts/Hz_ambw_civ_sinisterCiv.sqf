@@ -9,6 +9,7 @@ _targetSide = _this select 2;
 _grp = createGroup _side;
 [_civ] joinSilent _grp;
 _civ setunitpos "UP";
+_civ setVariable ["Hz_disableFSM",true];
 
 sleep 1;
 
@@ -16,6 +17,7 @@ while {alive _civ} do {
 
   _civ setCaptive true;
 	_civ setVariable ["Hz_ambw_sideFaction",[civilian,"Civilians"]];
+	_civ setVariable ["Hz_disableFSM",true];
 	
 	//apparently we need something like this in Arma 3 to force him to holster weapon...
 	_civ action ['SwitchWeapon', _civ, _civ, -1];
@@ -34,6 +36,7 @@ while {alive _civ} do {
 	
 	_civ setCaptive false;
 	_civ setVariable ["Hz_ambw_sideFaction",[_side,"Civilians"]];
+	_civ setVariable ["Hz_disableFSM",false];
 	
 	if ((random 1) < 0.75) then {
 	
