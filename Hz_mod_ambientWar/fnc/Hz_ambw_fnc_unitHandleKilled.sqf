@@ -60,7 +60,9 @@ private _unitImportance = _unitSideFaction select 2;
 
 if (_unitFaction == "") exitWith {};
 
-if ([_unitSide,_playerSide] call Hz_ambw_fnc_areEnemies) exitWith {};
+if (!([_unitSide,_playerSide] call Hz_ambw_fnc_areEnemies)) then {
 
-// global event
-[_unit,_unitImportance,_unitSide,_unitFaction,_playerSide,_playerFaction] remoteExecCall ["Hz_ambw_srel_fnc_broadcastUnitKilled",0,false];
+	// global event
+	[_unit,_unitImportance,_unitSide,_unitFaction,_playerSide,_playerFaction] remoteExecCall ["Hz_ambw_srel_fnc_broadcastUnitKilled",0,false];
+
+};
