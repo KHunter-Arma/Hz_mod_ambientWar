@@ -55,6 +55,7 @@ while {alive _bomber && !_exit} do
         [_bomber,"AmovPercMstpSsurWnonDnon"] remoteExecCall ["switchMove",0,false];
         _bomber disableAI "anim";
 				_bomber setvariable ["Hz_ambw_sideFaction",[_bomberSide,"Civilians"]];
+				[_bomber] joinsilent grpNull;
         [_bomber] joinsilent (creategroup _bomberSide);
         uisleep 1;
         

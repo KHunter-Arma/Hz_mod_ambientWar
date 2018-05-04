@@ -7,6 +7,7 @@ _side = _this select 1;
 _targetSide = _this select 2;
 
 _grp = createGroup _side;
+[_civ] joinSilent grpNull;
 [_civ] joinSilent _grp;
 _civ setunitpos "UP";
 _civ setVariable ["Hz_disableFSM",true];
