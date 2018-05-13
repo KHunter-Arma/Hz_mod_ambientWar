@@ -6,20 +6,19 @@ _civ = _this select 0;
 _side = _this select 1;
 _targetSide = _this select 2;
 
-_grp = createGroup _side;
-[_civ] joinSilent grpNull;
-[_civ] joinSilent _grp;
-_civ setunitpos "UP";
-_civ setVariable ["Hz_disableFSM",true];
+_grp = grpNull;
 _civ disableAI "FSM";
+_civ disableAI "AUTOCOMBAT";
 
 sleep 1;
 
 while {alive _civ} do {
 
-  _civ setCaptive true;
+	[_civ] joinSilent grpNull;
+	[_civ] joinSilent (createGroup civilian);
+	deleteGroup _grp;
+	_civ setunitpos "AUTO";
 	_civ setVariable ["Hz_ambw_sideFaction",[civilian,"Civilians"]];
-	_civ setVariable ["Hz_disableFSM",true];
 	_civ disableAI "FSM";
 	
 	//apparently we need something like this in Arma 3 to force him to holster weapon...
@@ -39,11 +38,13 @@ while {alive _civ} do {
 	//add some random intensity
   sleep (random 10);
 	
+	_grp = createGroup _side;
+	[_civ] joinSilent grpNull;
+	[_civ] joinSilent _grp;
+	
 	_civ enableAI "FSM";
 	_civ setCombatMode "RED";
-	_civ setCaptive false;
 	_civ setVariable ["Hz_ambw_sideFaction",[_side,"Civilians"]];
-	_civ setVariable ["Hz_disableFSM",false];
 	
 	//give enough time to "wake up"
 	uisleep 3;
@@ -54,7 +55,8 @@ while {alive _civ} do {
 	
 	};
 	
-  _grp setvariable ["Hz_AI_lastTrueDangerTime",time];
+	_grp setvariable ["Hz_AI_lastTrueDangerTime",time];
+  _grp setvariable ["Hz_AI_lastCriticalDangerTime",time];
   _grp setvariable ["Hz_AI_lastDangerTime",time];
   _grp setBehaviour "COMBAT";
 	_civ selectWeapon (handgunWeapon _civ);
@@ -64,7 +66,7 @@ while {alive _civ} do {
   
   sleep 10;
   
-  (!alive _civ) || ((behaviour _civ) == "SAFE")
+  (!alive _civ) || ((behaviour _civ) != "COMBAT")
   
   };
 

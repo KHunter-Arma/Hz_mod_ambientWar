@@ -32,7 +32,7 @@ while {alive _bomber && !_exit} do
     
     _timeout = time + 10;
     waitUntil {sleep 0.1; (!alive _bomber) || (_bomber distance _pos < 15) || (time > _timeout)};
-    if(((_bomber distance (_nearUnits select 0)) < 15) && (alive _bomber))
+    if((({(side _x) in _targetSides} count nearestobjects [_bomber,["LandVehicle","CAManBase"],15] ) > 0) && (alive _bomber))
     exitWith
     {
       _exit = true;
