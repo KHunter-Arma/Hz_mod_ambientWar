@@ -31,6 +31,8 @@ if (isServer) then {
 	//this is the default (mid-point)
 	Hz_ambw_srel_relationsOwnSideStarting = call compile (_moduleLogic getVariable "RelationsOwnSide");
 	Hz_ambw_srel_relationsCivilianStarting = call compile (_moduleLogic getVariable "RelationsCivilian");
+	publicVariable "Hz_ambw_srel_relationsOwnSideStarting";
+	publicVariable "Hz_ambw_srel_relationsCivilianStarting";
 
 	Hz_ambw_srel_relationsOwnSide = Hz_ambw_srel_relationsOwnSideStarting;
 	Hz_ambw_srel_relationsCivilian = Hz_ambw_srel_relationsCivilianStarting;
