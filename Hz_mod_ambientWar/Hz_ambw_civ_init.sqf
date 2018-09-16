@@ -9,7 +9,7 @@
 * https://creativecommons.org/licenses/by-nc-sa/4.0/
 *******************************************************************************/
 
-if (!isServer) exitWith {};
+if (!isServer && hasInterface) exitWith {};
 
 _moduleLogic = _this select 0;
 

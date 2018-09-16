@@ -14,7 +14,7 @@ _player = _this select 0;
 _container = _this select 1;
 _item = toLower (_this select 2);
 
-if (_item in ["ace_tourniquet","ace_fielddressing","ace_packingbandage","ace_quickclot","ace_elasticbandage","ace_morphine","ace_epinephrine","ace_salineiv_250","ace_salineiv_500","ace_salineiv_1000"]) exitWith {};
+if (_item in ["ace_tourniquet","ace_fielddressing","ace_packingbandage","ace_quikclot","ace_elasticbandage","ace_morphine","ace_epinephrine","ace_salineiv_250","ace_salineiv_500","ace_salineiv"]) exitWith {};
 
 _playerSideFaction = _killer call Hz_ambw_srel_fnc_getUnitSideFaction;
 _playerSide = _playerSideFaction select 0;

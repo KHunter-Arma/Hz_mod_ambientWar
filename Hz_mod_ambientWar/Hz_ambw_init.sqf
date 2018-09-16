@@ -8,20 +8,23 @@
 * together with this file or visit:
 * https://creativecommons.org/licenses/by-nc-sa/4.0/
 *******************************************************************************/
+_this spawn {
 
-Hz_ambw_path = "\x\Hz\Hz_mod_ambientWar\";
+	Hz_ambw_path = "\x\Hz\Hz_mod_ambientWar\";
 
-Hz_ambw_initDone = false;
+	Hz_ambw_initDone = false;
 
-Hz_ambw_functionsPath = Hz_ambw_path + "fnc\";
+	Hz_ambw_functionsPath = Hz_ambw_path + "fnc\";
 
-if (is3DEN) then {
+	if (is3DEN) then {
 
-	waitUntil {sleep 2; !is3DEN};
+		waitUntil {sleep 2; !is3DEN};
+
+	};
+
+	_this call compile preprocessFileLineNumbers (Hz_ambw_path + "Hz_ambw_srel_init.sqf");
+	_this call compile preprocessFileLineNumbers (Hz_ambw_path + "Hz_ambw_civ_init.sqf");
+
+	Hz_ambw_initDone = true;
 
 };
-
-_this call compile preprocessFileLineNumbers (Hz_ambw_path + "Hz_ambw_srel_init.sqf");
-_this call compile preprocessFileLineNumbers (Hz_ambw_path + "Hz_ambw_civ_init.sqf");
-
-Hz_ambw_initDone = true;

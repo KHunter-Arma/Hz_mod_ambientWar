@@ -47,7 +47,7 @@ if (isServer) then {
 
 };
 
-if (!isDedicated) then {
+if (!isDedicated && hasInterface) then {
 
 	Hz_ambw_srel_fnc_playerHandleTake = compile preprocessFileLineNumbers (Hz_ambw_functionsPath + "Hz_ambw_srel_fnc_playerHandleTake.sqf");
 

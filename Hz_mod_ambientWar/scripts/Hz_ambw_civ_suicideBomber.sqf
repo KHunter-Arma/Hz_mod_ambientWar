@@ -63,6 +63,7 @@ while {alive _bomber && !_exit} do
         
           _pos = getPos _bomber;
           _bomb = _explosiveType createVehicle _pos;
+					_bomb setpos _pos;
 					_bomb setDamage 1;
           sleep 0.5;
           deletevehicle _bomber;
