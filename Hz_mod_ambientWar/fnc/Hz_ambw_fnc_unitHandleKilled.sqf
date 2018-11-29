@@ -14,6 +14,10 @@ private _killer = _this select 1;
 
 if (_unit getVariable ["Hz_ambw_disableSideRelations",false]) exitWith {};
 
+//witnessed EH firing twice one time, make sure it doesn't happen...
+if (_unit getVariable ["Hz_ambw_killHandled",false]) exitWith {};
+_unit setVariable ["Hz_ambw_killHandled",true];
+
 // for now this isn't handled -- maybe in future handling death from bleeding from ACE medical after being hit can be implemented...
 if (isnull _killer) exitWith {};
 
