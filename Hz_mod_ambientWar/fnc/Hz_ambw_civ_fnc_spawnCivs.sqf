@@ -237,8 +237,13 @@ for "_i" from 1 to _num do {
     _civ setskill ["aimingAccuracy",0.1];
     _civ setskill ["spotTime",1];
     _civ allowFleeing 0.5;
+		
     removeAllWeapons _civ;
-    removeAllItems _civ;
+    removeAllItems _civ;		
+		_civ unassignItem "ItemMap";
+		_civ removeItem "ItemMap";
+		_civ unassignItem "ItemCompass";
+		_civ removeItem "ItemCompass";
     
     _civ setposatl _spawnpos;
     
@@ -282,8 +287,13 @@ for "_i" from 1 to _num do {
     
     _civ setSkill 0;
     _civ allowFleeing 1;
+		
     removeAllWeapons _civ;
-    removeAllItems _civ;       
+    removeAllItems _civ;     
+		_civ unassignItem "ItemMap";
+		_civ removeItem "ItemMap";
+		_civ unassignItem "ItemCompass";
+		_civ removeItem "ItemCompass";		
     
     _civ setposatl _spawnpos;
     

@@ -56,7 +56,7 @@ if (isServer) then {
 	
 };
 
-if (!isDedicated) then {
+if (hasInterface) then {
 
 	private _text = "";
 	

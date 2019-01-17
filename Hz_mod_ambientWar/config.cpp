@@ -281,28 +281,13 @@ class CfgVehicles
   };
 };
 
-class Extended_InitPost_EventHandlers
-{
-		
-	class Civilian {		
-
-		class RemoveItems {
-			
-			serverInit = "if (!((_this select 0) in playableunits)) then {(_this select 0) unassignItem 'ItemMap'; (_this select 0) removeItem 'ItemMap'; (_this select 0) unassignItem 'ItemCompass'; (_this select 0) removeItem 'ItemCompass';};";
-			
-		};
-		
-	};
-			
-};
-
 class Extended_Killed_EventHandlers {
 		
 	class CAManBase {		
 
 		class Hz_ambw_EH_unitDead {
 			
-			serverKilled = "_this call Hz_ambw_fnc_unitHandleKilled;";
+			killed = "_this call Hz_ambw_fnc_unitHandleKilled;";
 			
 		};
 	};
