@@ -15,37 +15,32 @@ Hz_ambw_srel_fnc_broadcastUnitKilled = compile preprocessFileLineNumbers (Hz_amb
 Hz_ambw_srel_fnc_getUnitSideFaction = compile preprocessFileLineNumbers (Hz_ambw_functionsPath + "Hz_ambw_srel_fnc_getUnitSideFaction.sqf");
 Hz_ambw_srel_factions = call compile (_moduleLogic getVariable "Factions");
 Hz_ambw_fnc_areEnemies = compile preprocessFileLineNumbers (Hz_ambw_functionsPath + "Hz_ambw_fnc_areEnemies.sqf");
+Hz_ambw_fnc_unitHandleKilled = compile preprocessFileLineNumbers (Hz_ambw_functionsPath + "Hz_ambw_fnc_unitHandleKilled.sqf");
+Hz_ambw_srel_relationsPenaltyPerKill = call compile (_moduleLogic getVariable "PenaltyPerKill");
 
-if (isServer || !hasInterface) then {
-
-	Hz_ambw_fnc_unitHandleKilled = compile preprocessFileLineNumbers (Hz_ambw_functionsPath + "Hz_ambw_fnc_unitHandleKilled.sqf");
-	Hz_ambw_srel_relationsPenaltyPerKill = call compile (_moduleLogic getVariable "PenaltyPerKill");
-	
-	if (isServer) then {
+if (isServer) then {
 		
-		Hz_ambw_srel_relationsPenaltyPerStolenItem = call compile (_moduleLogic getVariable "PenaltyPerStolenItem");
-		Hz_ambw_srel_relationsPenaltyPerStolenWeapon = call compile (_moduleLogic getVariable "PenaltyPerStolenWeapon");
-		publicVariable "Hz_ambw_srel_relationsPenaltyPerStolenItem";
-		publicVariable "Hz_ambw_srel_relationsPenaltyPerStolenWeapon";
+	Hz_ambw_srel_relationsPenaltyPerStolenItem = call compile (_moduleLogic getVariable "PenaltyPerStolenItem");
+	Hz_ambw_srel_relationsPenaltyPerStolenWeapon = call compile (_moduleLogic getVariable "PenaltyPerStolenWeapon");
+	publicVariable "Hz_ambw_srel_relationsPenaltyPerStolenItem";
+	publicVariable "Hz_ambw_srel_relationsPenaltyPerStolenWeapon";
 
-		//this is the default (mid-point)
-		Hz_ambw_srel_relationsOwnSideStarting = call compile (_moduleLogic getVariable "RelationsOwnSide");
-		Hz_ambw_srel_relationsCivilianStarting = call compile (_moduleLogic getVariable "RelationsCivilian");
-		publicVariable "Hz_ambw_srel_relationsOwnSideStarting";
-		publicVariable "Hz_ambw_srel_relationsCivilianStarting";
+	//this is the default (mid-point)
+	Hz_ambw_srel_relationsOwnSideStarting = call compile (_moduleLogic getVariable "RelationsOwnSide");
+	Hz_ambw_srel_relationsCivilianStarting = call compile (_moduleLogic getVariable "RelationsCivilian");
+	publicVariable "Hz_ambw_srel_relationsOwnSideStarting";
+	publicVariable "Hz_ambw_srel_relationsCivilianStarting";
 
-		Hz_ambw_srel_relationsOwnSide = Hz_ambw_srel_relationsOwnSideStarting;
-		Hz_ambw_srel_relationsCivilian = Hz_ambw_srel_relationsCivilianStarting;
-		publicVariable "Hz_ambw_srel_relationsOwnSide";
-		publicVariable "Hz_ambw_srel_relationsCivilian";
+	Hz_ambw_srel_relationsOwnSide = Hz_ambw_srel_relationsOwnSideStarting;
+	Hz_ambw_srel_relationsCivilian = Hz_ambw_srel_relationsCivilianStarting;
+	publicVariable "Hz_ambw_srel_relationsOwnSide";
+	publicVariable "Hz_ambw_srel_relationsCivilian";
 
-		Hz_ambw_srel_enableHzEcon = _moduleLogic getVariable "EnableHzEcon";
-		publicVariable "Hz_ambw_srel_enableHzEcon";
+	Hz_ambw_srel_enableHzEcon = _moduleLogic getVariable "EnableHzEcon";
+	publicVariable "Hz_ambw_srel_enableHzEcon";
 
-		Hz_ambw_srel_fundsPenaltyPerKill = call compile (_moduleLogic getVariable "FundsPenaltyPerKill");
-		publicVariable "Hz_ambw_srel_fundsPenaltyPerKill";
-
-	};
+	Hz_ambw_srel_fundsPenaltyPerKill = call compile (_moduleLogic getVariable "FundsPenaltyPerKill");
+	publicVariable "Hz_ambw_srel_fundsPenaltyPerKill";
 
 };
 

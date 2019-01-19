@@ -12,6 +12,8 @@
 private _unit = _this select 0;
 private _killer = _this select 1;
 
+if (isPlayer _unit) exitWith {};
+
 if (_unit getVariable ["Hz_ambw_disableSideRelations",false]) exitWith {};
 
 //witnessed EH firing twice one time, make sure it doesn't happen...

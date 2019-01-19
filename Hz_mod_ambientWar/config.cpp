@@ -87,6 +87,7 @@ class cfgSounds {
 
 class CfgVehicles
 {
+
   class Logic;
   class Module_F: Logic
   {
@@ -281,14 +282,32 @@ class CfgVehicles
   };
 };
 
+class Extended_InitPost_EventHandlers {
+		
+	class CAManBase {		
+	
+		class Hz_ambw_EH_unitDead {
+			
+			init = "if (local (_this select 0)) then {(_this select 0) addEventHandler ['Killed',{_this call Hz_ambw_fnc_unitHandleKilled;}];};";
+		
+		};
+			
+	}; 
+
+};
+
+/*
 class Extended_Killed_EventHandlers {
 		
 	class CAManBase {		
-
+	
 		class Hz_ambw_EH_unitDead {
 			
 			killed = "_this call Hz_ambw_fnc_unitHandleKilled;";
-			
+		
 		};
+			
 	};
+	
 };
+*/
