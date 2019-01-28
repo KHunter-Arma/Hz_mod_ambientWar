@@ -8,7 +8,7 @@
 * together with this file or visit:
 * https://creativecommons.org/licenses/by-nc-sa/4.0/
 *******************************************************************************/
-private ["_containerType", "_player", "_container", "_item", "_playerSideFaction", "_killer", "_playerSide", "_playerFaction", "_unit", "_isWeapon", "_temp", "_nearBodies", "_weapons", "_attachments", "_unitSideFaction", "_unitSide", "_unitFaction", "_unitImportance"];
+private ["_containerType", "_player", "_container", "_item", "_playerSideFaction","_playerSide", "_playerFaction", "_unit", "_isWeapon", "_temp", "_nearBodies", "_weapons", "_attachments", "_unitSideFaction", "_unitSide", "_unitFaction", "_unitImportance"];
 
 _player = _this select 0;
 _container = _this select 1;
@@ -16,7 +16,7 @@ _item = toLower (_this select 2);
 
 if (_item in ["ace_tourniquet","ace_fielddressing","ace_packingbandage","ace_quikclot","ace_elasticbandage","ace_morphine","ace_epinephrine","ace_salineiv_250","ace_salineiv_500","ace_salineiv"]) exitWith {};
 
-_playerSideFaction = _killer call Hz_ambw_srel_fnc_getUnitSideFaction;
+_playerSideFaction = _player call Hz_ambw_srel_fnc_getUnitSideFaction;
 _playerSide = _playerSideFaction select 0;
 _playerFaction = _playerSideFaction select 1;
 
