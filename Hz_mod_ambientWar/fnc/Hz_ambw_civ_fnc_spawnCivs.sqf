@@ -315,6 +315,8 @@ if (Hz_ambw_civ_debug) then {sleep 4; [-1, {hint format ["Script done. returned 
 _trigger setVariable ["civarray",_civarray];
 _trigger setVariable ["mutex",true];
 
+{_x deleteGroupWhenEmpty true} foreach _civgroups;
+
 publicvariable "Hz_ambw_currentNumberOfCiviliansSpawned";
 
 if(Hz_ambw_civ_forceGlobalMutex) then {Hz_ambw_civGlobalMutexUnlocked = true;};

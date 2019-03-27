@@ -56,8 +56,11 @@ while {alive _bomber && !_exit} do
         _bomber disableAI "anim";
 				_bomber setvariable ["Hz_ambw_sideFaction",[_bomberSide,"Civilians"]];
 				[_bomber] joinsilent grpNull;
-        [_bomber] joinsilent (creategroup _bomberSide);
+				_bgroup = creategroup _bomberSide;
+        [_bomber] joinsilent _bgroup;
         uisleep 1;
+				
+				_bgroup deleteGroupWhenEmpty true;
         
         if (alive _bomber) then {
         

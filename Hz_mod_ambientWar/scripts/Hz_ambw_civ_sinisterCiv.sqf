@@ -15,7 +15,8 @@ sleep 1;
 while {alive _civ} do {
 
 	[_civ] joinSilent grpNull;
-	[_civ] joinSilent (createGroup civilian);
+	_civgrp = createGroup civilian;
+	[_civ] joinSilent _civgrp;
 	deleteGroup _grp;
 	_civ setunitpos "AUTO";
 	_civ setVariable ["Hz_ambw_sideFaction",[civilian,"Civilians"]];
@@ -35,14 +36,15 @@ while {alive _civ} do {
 
   };
 		
-	if (!alive _civ) exitWith {};
+	if (!alive _civ) exitWith {deleteGroup _civgrp};
 
 	//add some random intensity
   sleep (random 10);
 		
-	_grp = createGroup _side;
+	_grp = createGroup [_side,true];
 	[_civ] joinSilent grpNull;
 	[_civ] joinSilent _grp;
+	deleteGroup _civgrp;
 	
 	{_civ reveal [_x,2]} foreach _nearTargets;
 	
@@ -75,3 +77,5 @@ while {alive _civ} do {
   };
 
 };
+
+deleteGroup _grp;
