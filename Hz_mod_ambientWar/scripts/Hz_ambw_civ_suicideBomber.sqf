@@ -58,17 +58,17 @@ while {alive _bomber && !_exit} do
 				[_bomber] joinsilent grpNull;
 				_bgroup = creategroup _bomberSide;
         [_bomber] joinsilent _bgroup;
-        uisleep 1;
+        uisleep 1.4;
 				
 				_bgroup deleteGroupWhenEmpty true;
         
-        if (alive _bomber) then {
+        if ((alive _bomber) && {!(captive _bomber)}) then {
         
           _pos = getPos _bomber;
           _bomb = _explosiveType createVehicle _pos;
 					_bomb setpos _pos;
 					_bomb setDamage 1;
-          sleep 0.5;
+          uisleep 0.1;
           deletevehicle _bomber;
           
         };
