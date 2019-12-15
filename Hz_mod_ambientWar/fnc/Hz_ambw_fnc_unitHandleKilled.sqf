@@ -24,6 +24,7 @@ _unit setVariable ["Hz_ambw_killHandled",true];
 if (isnull _killer) exitWith {};
 
 private _killedByPlayer = false;
+private _hitAndRun = false;
       
 if (isplayer _killer) then {
 
@@ -41,7 +42,12 @@ if (isplayer _killer) then {
 		
 		{
 			
-			if (((speed _x) > 10) && (isplayer (driver _x))) exitWith {_killedByPlayer = true;};
+			if (((speed _x) > 10) && {isplayer (driver _x)}) exitWith {
+			
+				_killedByPlayer = true;
+				_hitAndRun = true;
+				
+			};
 			
 		} foreach _nearCars;
 		
@@ -70,5 +76,15 @@ if (!([_unitSide,_playerSide] call Hz_ambw_fnc_areEnemies)) then {
 
 	// global event
 	[_unit,_unitImportance,_unitSide,_unitFaction,_playerSide,_playerFaction] remoteExecCall ["Hz_ambw_srel_fnc_broadcastUnitKilled",0,false];
+	
+	if (_hitAndRun) then {
+	
+		diag_log format ["Unit %1 was killed by %2 (%3 / %4) with speed %5", typeof _unit, name _killer, typeof vehicle _killer, assignedVehicleRole _killer, speed vehicle _killer];
+	
+	} else {
+	
+		diag_log format ["Unit %1 was killed by %2 (%3 / %4) with weapon %5", typeof _unit, name _killer, typeof vehicle _killer, assignedVehicleRole _killer, currentWeapon vehicle _killer];
+	
+	};
 
 };
