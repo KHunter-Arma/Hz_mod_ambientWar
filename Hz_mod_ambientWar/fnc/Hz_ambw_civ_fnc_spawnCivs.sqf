@@ -112,6 +112,10 @@ _group3 = creategroup civilian;
 
 _civgroups = [_group1,_group2,_group3];
 
+{
+	_x deleteGroupWhenEmpty true;
+} foreach _civgroups;
+
 _civ = objNull;
 
 //Find near roads

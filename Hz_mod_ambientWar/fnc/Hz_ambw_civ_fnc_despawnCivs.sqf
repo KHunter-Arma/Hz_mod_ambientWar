@@ -64,7 +64,14 @@
 	{if(alive _x) then {_killcivs set [count _killcivs,_x];};}foreach _civarray;
 
 	//{_x setdamage 1;}foreach _killcivs;
-	{deletevehicle _x; deletegroup (group _x);} foreach _killcivs;
+	{	
+		_veh = vehicle _x;
+		if (_veh == _x) then {							
+			deletevehicle _x;							
+		} else {							
+			_veh deleteVehicleCrew _x;							
+		};
+	} foreach _killcivs;
 
 	_civarray = [];	
 	
