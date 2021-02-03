@@ -48,20 +48,20 @@ class CfgMods
 
 class cfgFunctions
 {
-  class Hz {
-      
-      class Hz_moduleFunctions {
-				
-				class ambw_init {
-					
+  class Hz {      
+      class Hz_moduleFunctions {				
+				class ambw_init {					
 					file = "\x\Hz\Hz_mod_ambientWar\Hz_ambw_init.sqf";					
-					
-				};     
-
+				};				
       };
-    
-  };
-  
+  };	
+	class Hz_ambw_pat {
+		class preStart {
+			class addPatrol {					
+				file = "\x\Hz\Hz_mod_ambientWar\fnc\Hz_ambw_pat_fnc_addPatrol.sqf";					
+			};			
+		};
+	};
 };
 
 class CfgFactionClasses

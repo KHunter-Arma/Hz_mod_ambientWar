@@ -31,8 +31,8 @@ while {alive _civ} do {
 		
 		_nearTargets = nearestobjects [_civ, ["CAManBase"], 50];
     
-    (({((side _x) == _targetSide) && ((vehicle _x) == _x)} count _nearTargets) > 0)
-    || !alive _civ
+    (({((side _x) == _targetSide) && {(vehicle _x) == _x}} count _nearTargets) > 0)
+    || {!alive _civ}
 
   };
 		
@@ -72,7 +72,7 @@ while {alive _civ} do {
   
   sleep 10;
   
-  (!alive _civ) || ((behaviour _civ) != "COMBAT")
+  (!alive _civ) || {(behaviour _civ) != "COMBAT"}
   
   };
 

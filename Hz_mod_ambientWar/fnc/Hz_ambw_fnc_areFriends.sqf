@@ -13,4 +13,4 @@ params ["_side1","_side2"];
 
 if ((_side1 == sideLogic) || {_side2 == sideLogic}) exitWith {false};
 
-(_side1 getFriend _side2) < 0.6
+(_side1 getFriend _side2) >= 0.6

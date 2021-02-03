@@ -234,13 +234,13 @@ for "_i" from 1 to _num do {
     _civarray pushBack _civ;  
     
     _civ setskill 0.2;
+		_civ allowFleeing 0.5;
     _civ setskill ["aimingSpeed",0.6];
-    _civ setskill ["aimingShake",0];
+    _civ setskill ["aimingShake",0.02];
     _civ setskill ["reloadSpeed",0.2];
     _civ setskill ["spotDistance",0.2];
-    _civ setskill ["aimingAccuracy",0.1];
-    _civ setskill ["spotTime",1];
-    _civ allowFleeing 0.5;
+    _civ setskill ["aimingAccuracy",0.02];
+    _civ setskill ["spotTime",1];    
 		
     removeAllWeapons _civ;
     removeAllItems _civ;		
@@ -257,13 +257,16 @@ for "_i" from 1 to _num do {
 		
 		if (_prob < Hz_ambw_civ_suicideBomberProbability) then {
 		
-			_civ setskill 1;
-			_civ addMagazine "IEDUrbanBig_Remote_Mag";
-			[_civ,[Hz_ambw_armedCivilianTargetSide],"IEDUrbanBig_Remote_Ammo",Hz_ambw_armedCivilianSide] spawn Hz_ambw_civ_suicideBomber;
-        
+			_civ setskill 1;			
 			_civ setunitpos "UP";
-        
-			if ((random 1) > 0.5) then {_civ addBackpack "B_OutdoorPack_tan";};
+			
+			if ((random 1) < 0.5) then {
+				_civ addBackpack "B_OutdoorPack_tan";	
+				_civ addMagazine "IEDUrbanBig_Remote_Mag";			
+				[_civ,[Hz_ambw_armedCivilianTargetSide],"IEDUrbanBig_Remote_Ammo",Hz_ambw_armedCivilianSide] spawn Hz_ambw_civ_suicideBomber;
+			} else {
+				[_civ,[Hz_ambw_armedCivilianTargetSide],"IEDUrbanSmall_Remote_Mag",Hz_ambw_armedCivilianSide] spawn Hz_ambw_civ_suicideBomber;
+			};	
 		
 		} else {
 		
@@ -271,6 +274,7 @@ for "_i" from 1 to _num do {
 			
 				if (_prob < (_x select 0)) exitWith {
 				
+					_civ addMagazine (_x select 2);
 					_civ addWeapon (_x select 1);
 					_civ addMagazines [_x select 2, _x select 3];
 					

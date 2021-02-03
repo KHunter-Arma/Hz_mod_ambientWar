@@ -14,7 +14,6 @@ _moduleLogic = _this select 0;
 Hz_ambw_srel_fnc_broadcastUnitKilled = compile preprocessFileLineNumbers (Hz_ambw_functionsPath + "Hz_ambw_srel_fnc_broadcastUnitKilled.sqf");
 Hz_ambw_srel_fnc_getUnitSideFaction = compile preprocessFileLineNumbers (Hz_ambw_functionsPath + "Hz_ambw_srel_fnc_getUnitSideFaction.sqf");
 Hz_ambw_srel_factions = call compile (_moduleLogic getVariable "Factions");
-Hz_ambw_fnc_areEnemies = compile preprocessFileLineNumbers (Hz_ambw_functionsPath + "Hz_ambw_fnc_areEnemies.sqf");
 Hz_ambw_fnc_unitHandleKilled = compile preprocessFileLineNumbers (Hz_ambw_functionsPath + "Hz_ambw_fnc_unitHandleKilled.sqf");
 Hz_ambw_srel_relationsPenaltyPerKill = call compile (_moduleLogic getVariable "PenaltyPerKill");
 
