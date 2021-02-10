@@ -10,28 +10,30 @@ _civ disableAI "AUTOCOMBAT";
 
 _nearTargets = [];
 
+//apparently we need something like this in Arma 3 to force him to holster weapon...
+_civ action ['SwitchWeapon', _civ, _civ, -1];
+sleep 0.1;
+// get rid of initial "weapon on back" animation at spawn...
+[_civ, ""] remoteExecCall ["switchMove", 0, false];
 sleep 1;
 
-while {alive _civ} do {
+[_civ] joinSilent grpNull;
+_civgrp = createGroup civilian;
+[_civ] joinSilent _civgrp;
+deleteGroup _grp;
+_civ setunitpos "AUTO";
+_civ setVariable ["Hz_ambw_sideFaction",[civilian,"Civilians"]];
+//_civ disableAI "FSM";
 
-	[_civ] joinSilent grpNull;
-	_civgrp = createGroup civilian;
-	[_civ] joinSilent _civgrp;
-	deleteGroup _grp;
-	_civ setunitpos "AUTO";
-	_civ setVariable ["Hz_ambw_sideFaction",[civilian,"Civilians"]];
-	//_civ disableAI "FSM";
-	
-	//apparently we need something like this in Arma 3 to force him to holster weapon...
-	_civ action ['SwitchWeapon', _civ, _civ, -1];
+while {alive _civ} do {
 
   waitUntil {
     
     sleep 5;
 		
-		_nearTargets = nearestobjects [_civ, ["CAManBase"], 50];
+		_nearTargets = _civ nearEntities ["CAManBase", 50];
     
-    (({((side _x) == _targetSide) && {(vehicle _x) == _x}} count _nearTargets) > 0)
+    ((lifeState _civ) != "INCAPACITATED") && {({(side _x) == _targetSide} count _nearTargets) > 0}
     || {!alive _civ}
 
   };
@@ -72,9 +74,23 @@ while {alive _civ} do {
   
   sleep 10;
   
-  (!alive _civ) || {(behaviour _civ) != "COMBAT"}
+  (!alive _civ) || {((lifeState _civ) != "INCAPACITATED") && {(behaviour _civ) != "COMBAT"}}
   
   };
+	
+	if (alive _civ) then {
+	
+		[_civ] joinSilent grpNull;
+		_civgrp = createGroup civilian;
+		[_civ] joinSilent _civgrp;
+		deleteGroup _grp;
+		_civ setunitpos "AUTO";
+		_civ setVariable ["Hz_ambw_sideFaction",[civilian,"Civilians"]];
+		//_civ disableAI "FSM";
+
+		_civ action ['SwitchWeapon', _civ, _civ, -1];
+	
+	};
 
 };
 

@@ -267,6 +267,9 @@ for "_i" from 1 to _num do {
 			} else {
 				[_civ,[Hz_ambw_armedCivilianTargetSide],"IEDUrbanSmall_Remote_Mag",Hz_ambw_armedCivilianSide] spawn Hz_ambw_civ_suicideBomber;
 			};	
+			
+			// get rid of initial "weapon on back" animation at spawn...
+			[_civ, ""] remoteExecCall ["switchMove", 0, false];
 		
 		} else {
 		
@@ -309,6 +312,9 @@ for "_i" from 1 to _num do {
     (group _civ) setBehaviour "SAFE";      
     
     if(Hz_ambw_enableClientProcessing) then {_client = selectRandom _ownerIDs; _civ setowner _client;};
+		
+		// get rid of initial "weapon on back" animation at spawn...
+		[_civ, ""] remoteExecCall ["switchMove", 0, false];
     
   };
 
