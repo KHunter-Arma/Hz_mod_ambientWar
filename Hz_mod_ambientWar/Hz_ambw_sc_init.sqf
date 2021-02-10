@@ -38,7 +38,7 @@ Hz_ambw_sc_staticGunnerTypes = [
 ["LOP_IA_Infantry_Rifleman_4"],
 []];
 Hz_ambw_sc_flagTypes = ["FlagCarrierTakistan_EP1","lop_Flag_Iraq_F","FlagCarrierTKMilitia_EP1"];
-Hz_ambw_sc_captureTime = 120;
+Hz_ambw_sc_captureTime = 360;
 
 if (!isServer) exitWith {};
 

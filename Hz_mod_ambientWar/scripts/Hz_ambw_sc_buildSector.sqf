@@ -55,6 +55,7 @@ private _groupsCapturing = _sector select 7;
 private _lead = leader _grp;
 private _side = side _lead;
 private _sideX = sideEmpty;
+private _friendlyPlayerFactionsHelpingNeutralise = [];
 
 //are we still within the radius if we were under attack until now? -- a good way to handle this is to return to patrol and let it re-issue move order
 if ((_lead distance2D _sectorPos) > _radius) exitWith {}; 
@@ -137,14 +138,34 @@ _tEnd = time + Hz_ambw_sc_captureTime/4;
 if (call _sleep) exitWith {};
 private _flagPos = [0,0,0];
 if (!isnull _flag) then {
+	
 	_flagPos = getPosATL _flag;
 	deleteVehicle _flag;
 	(_sector select 4) setMarkerColor "ColorBlack";
 	_sector set [3, sideEmpty];
 	Hz_ambw_sc_sectors set [_sectorIndex, _sector];
 	publicVariable "Hz_ambw_sc_sectors";
+	
+	// check for any helping player factions
+	private _nearFriendlyPlayers = (_sectorPos nearEntities [["CAManBase", "LandVehicle", "Ship", "StaticWeapon"], _radius*1.2]) select {
+		private _unit = effectiveCommander _x;	
+		(isPlayer _unit)
+		&& {[side _unit, _side] call Hz_ambw_fnc_areFriends}
+		&& {!(_unit getVariable ["ACE_isUnconscious",false])}
+		&& {(lifeState _unit) != "INCAPACITATED"}
+	};
+	_nearFriendlyPlayers = _nearFriendlyPlayers apply {effectiveCommander _x};
+	{
+		private _sideFaction = _x call Hz_ambw_srel_fnc_getUnitSideFaction;
+		private _playerFaction = _sideFaction select 1;
+		if (_playerFaction != "") then {
+			_friendlyPlayerFactionsHelpingNeutralise pushBackUnique _playerFaction;
+		};
+	} foreach _nearFriendlyPlayers;
+	
 	_tEnd = time + Hz_ambw_sc_captureTime/4;
 	if (call _sleep) exitWith {};
+	
 } else {
 	_flagPos = [_sectorPos,10] call Hz_ambw_fnc_findSafePos;
 };
@@ -163,6 +184,29 @@ private _colour = switch (_side) do {
 (_sector select 4) setMarkerColor _colour;
 Hz_ambw_sc_sectors set [_sectorIndex, _sector];
 publicVariable "Hz_ambw_sc_sectors";
+
+// check if helping player factions are still there
+private _nearFriendlyPlayers = (_sectorPos nearEntities [["CAManBase", "LandVehicle", "Ship", "StaticWeapon"], _radius]) select {
+	private _unit = effectiveCommander _x;	
+	(isPlayer _unit)
+	&& {[side _unit, _side] call Hz_ambw_fnc_areFriends}
+	&& {!(_unit getVariable ["ACE_isUnconscious",false])}
+	&& {(lifeState _unit) != "INCAPACITATED"}
+};
+_nearFriendlyPlayers = _nearFriendlyPlayers apply {effectiveCommander _x};
+{
+	private _sideFaction = _x call Hz_ambw_srel_fnc_getUnitSideFaction;
+	private _playerFaction = _sideFaction select 1;
+	if (_playerFaction != "") then {
+		if (_playerFaction in _friendlyPlayerFactionsHelpingNeutralise) then {
+			(format ["%1 relations with friendly forces have been improved for assisting them in capturing a strategic sector", _playerFaction]) remoteExecCall ["hint",0,false];
+			Hz_ambw_srel_relationsOwnSide = (Hz_ambw_srel_relationsOwnSide + Hz_ambw_srel_relationsImprovementForAssistingSectorCapture) min 150;
+			publicVariable "Hz_ambw_srel_relationsOwnSide";
+			_friendlyPlayerFactionsHelpingNeutralise = _friendlyPlayerFactionsHelpingNeutralise - [_playerFaction];
+			sleep 10;
+		};
+	};
+} foreach _nearFriendlyPlayers;
 
 private _defGroup = grpNull;
 
@@ -209,7 +253,8 @@ if ((({(alive _x) && {(lifeState _x) != "INCAPACITATED"}} count units _grp) < 1)
 private _numEmplacements = Hz_ambw_sc_emplacementCountMin max (round random Hz_ambw_sc_emplacementCountMax);
 
 _attacked = false;
-_emplacementBuildingPos = [];
+private _emplacementBuildingPos = [];
+private _emplacements = [];
 
 if (_numEmplacements > 0) then {
 
@@ -225,7 +270,8 @@ if (_numEmplacements > 0) then {
 		private _empPos = [_sectorPos, 20] call Hz_ambw_fnc_findSafePos;	
 		private _emp = (selectRandom (Hz_ambw_sc_fortificationTypes select _sideIndex)) createVehicle _empPos;
 		
-		_objects pushBack _emp;		
+		_objects pushBack _emp;
+		_emplacements pushBack _emp;
 		_emp setPosATL _empPos;
 		//most emplacements have "reversed" direction...
 		_emp setDir (_empPos getDir _flag);	
@@ -245,6 +291,8 @@ if (!_attacked) then {
 	private _numDefenders = Hz_ambw_sc_defenderCountMin max (round random Hz_ambw_sc_defenderCountMax);
 
 	if (_numDefenders > 0) then {
+	
+		_emplacements = _emplacements select {(count (_x nearEntities ["CAManBase", 10])) == 0};
 
 		for "_i" from 1 to _numDefenders do {
 			
@@ -256,15 +304,29 @@ if (!_attacked) then {
 			private _dude = _defGroup createUnit [(selectRandom (Hz_ambw_sc_defenderTypes select _sideIndex)), _sectorPos, [], 50, "NONE"];
 			
 			if ((count _emplacementBuildingPos) > 0) then {
-				_pos = selectRandom _emplacementBuildingPos;
+				private _pos = selectRandom _emplacementBuildingPos;
 				_dude setPosATL _pos;
 				_emplacementBuildingPos = _emplacementBuildingPos - [_pos];
 				_dude setVariable ["Hz_noMove",true];
 				_dude disableAI "PATH";
 				_dude forcespeed 0;
 				dostop _dude;
-			};
-			
+			} else {
+				if ((count _emplacements) > 0) then {
+					private _emp = selectRandom _emplacements;
+					_emplacements = _emplacements - [_emp];
+					private _empPos = getpos _emp;
+					private _bbox = boundingBoxReal _emp;
+					private _delta = (((_bbox select 0) distance2D (_bbox select 1))/2) + 1.3;
+					private _pos = [_empPos, _delta, [_shooter, _empPos] call BIS_fnc_dirTo] call BIS_fnc_relPos;
+					_pos set [2, 0];
+					_dude setPosATL _pos;
+					_dude setVariable ["Hz_noMove",true];
+					_dude disableAI "PATH";
+					_dude forcespeed 0;
+					dostop _dude;
+				};
+			};			
 		};
 
 	};

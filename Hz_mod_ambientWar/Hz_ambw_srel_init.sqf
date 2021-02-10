@@ -16,6 +16,7 @@ Hz_ambw_srel_fnc_getUnitSideFaction = compile preprocessFileLineNumbers (Hz_ambw
 Hz_ambw_srel_factions = call compile (_moduleLogic getVariable "Factions");
 Hz_ambw_fnc_unitHandleKilled = compile preprocessFileLineNumbers (Hz_ambw_functionsPath + "Hz_ambw_fnc_unitHandleKilled.sqf");
 Hz_ambw_srel_relationsPenaltyPerKill = call compile (_moduleLogic getVariable "PenaltyPerKill");
+Hz_ambw_srel_relationsImprovementForAssistingSectorCapture = Hz_ambw_srel_relationsPenaltyPerKill/2;
 
 if (isServer) then {
 		

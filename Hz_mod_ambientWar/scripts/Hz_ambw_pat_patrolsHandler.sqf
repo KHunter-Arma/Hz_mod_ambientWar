@@ -40,6 +40,9 @@ if (Hz_ambw_enablePersistency) then {
 		call Hz_ambw_sc_fnc_loadSectorsFromSave;
 		
 		call Hz_ambw_pat_fnc_loadPatrolsFromSave;
+		
+		Hz_ambw_sc_hcSectorsLoaded = true;
+		publicVariableServer "Hz_ambw_sc_hcSectorsLoaded";
 	
 	};
 	
