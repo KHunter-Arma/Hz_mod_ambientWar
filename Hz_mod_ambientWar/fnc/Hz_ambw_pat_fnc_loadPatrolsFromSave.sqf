@@ -128,7 +128,7 @@ if ((count Hz_pers_network_ambw_pat_gSides) == 0) exitWith {};
 		_group deleteGroupWhenEmpty true;
 		
 		if (alive _vehicle) then {
-			Hz_pops_deleteVehicleArray pushBack _vehicle;
+			Hz_ambw_pat_deleteVehicles pushBack _vehicle;
 		};
 		
 	};

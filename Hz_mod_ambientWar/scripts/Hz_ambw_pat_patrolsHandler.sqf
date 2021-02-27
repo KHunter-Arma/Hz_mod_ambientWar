@@ -64,9 +64,9 @@ while {true} do {
 
 	{		
 		if (!alive _x) then {					
-			Hz_abmw_pat_deleteVehicles = Hz_abmw_pat_deleteVehicles - [_x];			
+			Hz_ambw_pat_deleteVehicles = Hz_ambw_pat_deleteVehicles - [_x];			
 		};
-	} foreach Hz_abmw_pat_deleteVehicles;
+	} foreach Hz_ambw_pat_deleteVehicles;
 
 	if ((!Hz_ambw_pat_disablePatrols) && {(count allunits) < Hz_ambw_pat_maxNumOfUnits}) then {
 		
@@ -220,7 +220,7 @@ while {true} do {
 				
 					if (({(_x distance _veh) < Hz_ambw_pat_cleanupPlayerDist} count playableUnits) < 1) then {
 					
-						Hz_abmw_pat_deleteVehicles = Hz_abmw_pat_deleteVehicles - [_x];
+						Hz_ambw_pat_deleteVehicles = Hz_ambw_pat_deleteVehicles - [_x];
 						deletevehicle _x;				
 					
 					};
@@ -228,7 +228,7 @@ while {true} do {
 				};
 			
 			};
-		} foreach Hz_abmw_pat_deleteVehicles;
+		} foreach Hz_ambw_pat_deleteVehicles;
 	};
 
 };

@@ -68,7 +68,7 @@ if (call Hz_ambw_pat_fnc_isPatrolsMaster) then {
 	if (isnil "Hz_ambw_pat_disablePatrols") then {
 		Hz_ambw_pat_disablePatrols = false;
 	};
-	Hz_abmw_pat_deleteVehicles = [];
+	Hz_ambw_pat_deleteVehicles = [];
 	Hz_ambw_pat_opforUnits = [];
 	Hz_ambw_pat_bluforUnits = [];
 	Hz_ambw_pat_grnforUnits = [];

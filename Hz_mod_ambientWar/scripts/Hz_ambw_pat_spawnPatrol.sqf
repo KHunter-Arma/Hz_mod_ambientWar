@@ -139,7 +139,7 @@ publicVariableServer "Hz_ambw_pat_patrolGroups";
 _group deleteGroupWhenEmpty true;
 
 if (alive _vehicle) then {
-	Hz_pops_deleteVehicleArray pushBack _vehicle;
+	Hz_ambw_pat_deleteVehicles pushBack _vehicle;
 };
 
 Hz_ambw_pat_patrolsArray pushBack [_unitType, _respawnPosition, _patrolMarker, _side, _crewAndPassengerTypes,_infantryTypes];
