@@ -26,7 +26,7 @@ private _trackedSectors_ID = [];
 private _trackedSectors_IsEmpty = [];
 {
 	// create a sector ID from coordinates
-	_trackedSectors_ID = ((_x select 0) select 0) + ((_x select 0) select 1);
+	_trackedSectors_ID pushBack (((_x select 0) select 0) + ((_x select 0) select 1));
 	_trackedSectors_IsEmpty pushBack false;
 } foreach Hz_ambw_sc_sectors; 
 
@@ -98,7 +98,7 @@ while {true} do {
 		_trackedSectors_ID = [];
 		_trackedSectors_IsEmpty = [];	
 		{
-			_trackedSectors_ID = ((_x select 0) select 0) + ((_x select 0) select 1);
+			_trackedSectors_ID pushBack (((_x select 0) select 0) + ((_x select 0) select 1));
 			_trackedSectors_IsEmpty pushBack false;
 		} foreach Hz_ambw_sc_sectors; 
 	};
