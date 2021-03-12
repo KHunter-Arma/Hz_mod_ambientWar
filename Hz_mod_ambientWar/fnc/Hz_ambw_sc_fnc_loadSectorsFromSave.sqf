@@ -58,6 +58,7 @@ if ((count Hz_pers_network_ambw_sc_sPos) == 0) exitWith {
 	private _defGroup = grpNull;
 	private _objects = _sector select 6;
 	private _emplacementBuildingPos = [];
+	private _emplacements = [];
 	{
 		if (_x isKindOf "StaticWeapon") then {
 			private _gunPos = _objectPosATL select _foreachIndex;
@@ -84,7 +85,8 @@ if ((count Hz_pers_network_ambw_sc_sPos) == 0) exitWith {
 			private _empPos = _objectPosATL select _foreachIndex;
 			private _emp = _x createVehicle _empPos;
 			
-			_objects pushBack _emp;		
+			_objects pushBack _emp;
+			_emplacements pushBack _emp;	
 			_emp setPosATL _empPos;
 			//most emplacements have "reversed" direction...
 			_emp setDir (_empPos getDir _flag);	
@@ -102,6 +104,8 @@ if ((count Hz_pers_network_ambw_sc_sPos) == 0) exitWith {
 		private _numDefenders = Hz_ambw_sc_defenderCountMin max (round random Hz_ambw_sc_defenderCountMax);
 
 		if (_numDefenders > 0) then {
+		
+			_emplacements = _emplacements select {(count (_x nearEntities ["CAManBase", 10])) == 0};
 
 			for "_i" from 1 to _numDefenders do {
 				
@@ -120,6 +124,21 @@ if ((count Hz_pers_network_ambw_sc_sPos) == 0) exitWith {
 					_dude disableAI "PATH";
 					_dude forcespeed 0;
 					dostop _dude;
+				} else {
+					if ((count _emplacements) > 0) then {
+						private _emp = selectRandom _emplacements;
+						_emplacements = _emplacements - [_emp];
+						private _empPos = getpos _emp;
+						private _bbox = boundingBoxReal _emp;
+						private _delta = (((_bbox select 0) distance2D (_bbox select 1))/2) + 1.3;
+						private _pos = [_empPos, _delta, [_empPos, _flag] call BIS_fnc_dirTo] call BIS_fnc_relPos;
+						_pos set [2, 0];
+						_dude setPosATL _pos;
+						_dude setVariable ["Hz_noMove",true];
+						_dude disableAI "PATH";
+						_dude forcespeed 0;
+						dostop _dude;
+					};
 				};
 				
 			};
