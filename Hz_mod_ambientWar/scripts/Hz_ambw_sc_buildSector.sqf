@@ -227,6 +227,7 @@ if (_numGuns > 0) then {
 		_gun setPosATL _gunPos;
 		_gun setDir ((_gunPos getDir _flag) + 180);
 		_gun setVehicleLock "LOCKED";
+		_gun enableWeaponDisassembly false;
 		
 		_objects pushBack _gun;
 		

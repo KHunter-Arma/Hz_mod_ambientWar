@@ -66,6 +66,7 @@ if ((count Hz_pers_network_ambw_sc_sPos) == 0) exitWith {
 			_gun setPosATL _gunPos;
 			_gun setDir ((_gunPos getDir _flag) + 180);
 			_gun setVehicleLock "LOCKED";
+			_gun enableWeaponDisassembly false;
 			
 			_objects pushBack _gun;
 			
