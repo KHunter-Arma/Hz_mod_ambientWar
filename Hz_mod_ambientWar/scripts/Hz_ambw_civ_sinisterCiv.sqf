@@ -5,25 +5,26 @@ _side = _this select 1;
 _targetSide = _this select 2;
 
 _grp = grpNull;
-//_civ disableAI "FSM";
-_civ disableAI "AUTOCOMBAT";
 
 _nearTargets = [];
-
-//apparently we need something like this in Arma 3 to force him to holster weapon...
-_civ action ['SwitchWeapon', _civ, _civ, -1];
-sleep 0.1;
-// get rid of initial "weapon on back" animation at spawn...
-[_civ, ""] remoteExecCall ["switchMove", 0, false];
-sleep 1;
 
 [_civ] joinSilent grpNull;
 _civgrp = createGroup civilian;
 [_civ] joinSilent _civgrp;
-deleteGroup _grp;
-_civ setunitpos "AUTO";
 _civ setVariable ["Hz_ambw_sideFaction",[civilian,"Civilians"]];
+
+_civ disableAI "AUTOCOMBAT";
 //_civ disableAI "FSM";
+
+_civ setunitpos "AUTO";
+
+//apparently we need something like this in Arma 3 to force him to holster weapon...
+sleep 0.1;
+_civ action ['SwitchWeapon', _civ, _civ, 99];
+
+// get rid of initial "weapon on back" animation at spawn...
+sleep 0.1;
+[_civ, ""] remoteExecCall ["switchMove", 0, false];
 
 while {alive _civ} do {
 
@@ -37,7 +38,7 @@ while {alive _civ} do {
     || {!alive _civ}
 
   };
-		
+			
 	if (!alive _civ) exitWith {deleteGroup _civgrp};
 
 	//add some random intensity
@@ -88,7 +89,7 @@ while {alive _civ} do {
 		_civ setVariable ["Hz_ambw_sideFaction",[civilian,"Civilians"]];
 		//_civ disableAI "FSM";
 
-		_civ action ['SwitchWeapon', _civ, _civ, -1];
+		_civ action ['SwitchWeapon', _civ, _civ, 99];
 	
 	};
 

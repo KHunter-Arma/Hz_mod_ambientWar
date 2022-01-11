@@ -315,6 +315,10 @@ for "_i" from 1 to _num do {
 		
 		// get rid of initial "weapon on back" animation at spawn...
 		[_civ, ""] remoteExecCall ["switchMove", 0, false];
+		
+		if ((random 1) < 0.5) then {
+			doStop _civ;
+		};
     
   };
 
