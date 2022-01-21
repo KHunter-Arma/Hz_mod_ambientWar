@@ -67,6 +67,10 @@ if ((count Hz_pers_network_ambw_sc_sPos) == 0) exitWith {
 			_gun setDir ((_gunPos getDir _flag) + 180);
 			_gun setVehicleLock "LOCKED";
 			_gun enableWeaponDisassembly false;
+			_gun spawn {
+				sleep 5;
+				{deletevehicle _x} foreach (nearestObjects [_this, ["WeaponHolder"], 10]);
+			};
 			
 			_objects pushBack _gun;
 			
@@ -131,7 +135,7 @@ if ((count Hz_pers_network_ambw_sc_sPos) == 0) exitWith {
 						_emplacements = _emplacements - [_emp];
 						private _empPos = getpos _emp;
 						private _bbox = boundingBoxReal _emp;
-						private _delta = (((_bbox select 0) distance2D (_bbox select 1))/2) + 1.3;
+						private _delta = (((_bbox select 0) distance2D (_bbox select 1))/2) + 0.3;
 						private _pos = [_empPos, _delta, [_empPos, _flag] call BIS_fnc_dirTo] call BIS_fnc_relPos;
 						_pos set [2, 0];
 						_dude setPosATL _pos;

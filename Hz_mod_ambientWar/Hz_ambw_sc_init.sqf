@@ -14,9 +14,9 @@ Hz_ambw_sc_fnc_loadSectorsFromSave = compile preprocessFileLineNumbers (Hz_ambw_
 
 //TODO: module parameters
 Hz_ambw_sc_editorMarkers = ["sector_1","sector_2","sector_3","sector_4","sector_5","sector_6"];
-Hz_ambw_sc_defenderCountMin = 6;
-Hz_ambw_sc_defenderCountMax = 12;
-Hz_ambw_sc_staticCountMin = 1;
+Hz_ambw_sc_defenderCountMin = 12;
+Hz_ambw_sc_defenderCountMax = 24;
+Hz_ambw_sc_staticCountMin = 2;
 Hz_ambw_sc_staticCountMax = 3;
 Hz_ambw_sc_emplacementCountMin = 10;
 Hz_ambw_sc_emplacementCountMax = 20;
@@ -38,6 +38,10 @@ Hz_ambw_sc_staticGunnerTypes = [
 ["LOP_IA_Infantry_Rifleman_4"],
 []];
 Hz_ambw_sc_flagTypes = ["FlagCarrierTakistan_EP1","lop_Flag_Iraq_F","FlagCarrierTKMilitia_EP1"];
+Hz_ambw_sc_transportVehicleTypes = [
+["LOP_TKA_Ural", "CUP_O_V3S_Covered_TKA"],
+["LOP_IA_Ural"],
+[]];
 Hz_ambw_sc_captureTime = 360;
 
 if (!isServer) exitWith {};

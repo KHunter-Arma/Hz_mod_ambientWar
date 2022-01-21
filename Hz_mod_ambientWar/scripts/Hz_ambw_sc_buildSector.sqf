@@ -13,7 +13,7 @@ params ["_grp", "_sectorIndex"];
 
 private _sleep = {
 
-	while {(time < _tEnd) && {({(alive _x) && {(lifeState _x) != "INCAPACITATED"}} count units _grp) > 0} && {((leader _grp) distance2D _sectorPos) < _radius}} do {
+	while {(time < _tEnd) && {({(alive _x) && {(lifeState _x) != "INCAPACITATED"}} count units _grp) > 0}} do {
 		if (((time - (_grp getvariable ["Hz_AI_lastCriticalDangerTime",-120])) < 120) || {
 					_nearEntities = _sectorPos nearEntities [["CAManBase","LandVehicle","Ship","StaticWeapon"], _radius];
 					_strengthRatio = ({_sideX = side _x; (_sideX != civilian) && {[_side, _sideX] call Hz_ambw_fnc_areFriends}} count _nearEntities)/(0.1 max ({_sideX = side _x; (_sideX != civilian) && {[_side, _sideX] call Hz_ambw_fnc_areEnemies}} count _nearEntities));
@@ -24,7 +24,7 @@ private _sleep = {
 		sleep 5;
 	};
 	
-	if ((({(alive _x) && {(lifeState _x) != "INCAPACITATED"}} count units _grp) < 1) || {((leader _grp) distance2D _sectorPos) > _radius}) then {
+	if (({(alive _x) && {(lifeState _x) != "INCAPACITATED"}} count units _grp) < 1) then {
 		_groupsCapturing set [_sideIndex,(_groupsCapturing select _sideIndex) - [_grp]];
 		_sector set [7,_groupsCapturing];
 		Hz_ambw_sc_sectors set [_sectorIndex, _sector];
@@ -37,14 +37,54 @@ private _sleep = {
 
 };
 
-//wait until we are not being attacked
-waitUntil {
-	sleep 5;
-	((time - (_grp getvariable ["Hz_AI_lastCriticalDangerTime",-120])) > 120)	|| {({(alive _x) && {(lifeState _x) != "INCAPACITATED"}} count units _grp) < 1}
-};
+private _moveToPositionOrGun = {
 
-//check if still alive -- exit if not
-if (({(alive _x) && {(lifeState _x) != "INCAPACITATED"}} count units _grp) < 1) exitWith {};
+	params ["_dude", "_pos"];
+	
+	private _isGun = (typeName _pos) == "OBJECT";
+	private _gun = objNull;
+	if (_isGun) then {
+		_gun = _pos;
+		_pos = getpos _gun;
+	};
+	
+	_dude doMove _pos;
+
+	private _timeout = time + 120;
+	private _dudeFooked = false;
+	
+	waitUntil {
+		
+		sleep 2;
+		
+		if ((!alive _dude) || {(lifeState _dude) == "INCAPACITATED"}) then {
+			_dudeFooked = true;
+		};
+		
+		_dudeFooked || {(_dude distance _pos) < 10} || {time > _timeout}
+		
+	};
+	
+	if (!_dudeFooked) then {		
+		if (_isGun) then {
+			dostop _dude;
+			sleep 1;
+			[_dude] allowGetIn true;
+			[_dude] orderGetIn true;
+			_dude assignAsGunner _gun;
+			_dude moveInGunner _gun;
+		} else {
+			_dude setVariable ["Hz_noMove",true];
+			dostop _dude;
+			_dude forcespeed 0;
+			_dude disableAI "PATH";
+			_dude setPosATL _pos;
+			sleep 2;
+			_dude setPosATL _pos;
+		};
+	};
+
+};
 
 private _sector = Hz_ambw_sc_sectors select _sectorIndex; 
 private _sectorPos = _sector select 0;
@@ -85,6 +125,99 @@ private _strengthRatio = 0;
 private _tEnd = time + 10;
 if (call _sleep) exitWith {};
 
+private _useRealisticSectorBuildUp = isClass (configFile >> "cfgPatches" >> "Hz_AI");
+private _reinforcementVics = [];
+private _numDefenders = Hz_ambw_sc_defenderCountMin max (round random Hz_ambw_sc_defenderCountMax);
+private _numGuns = Hz_ambw_sc_staticCountMin max (round random Hz_ambw_sc_staticCountMax);
+private _defGroup = grpNull;
+
+if (_useRealisticSectorBuildUp) then {
+
+	private _repeat = true;
+
+	// probably needs checking of enemies trying to capture the sector at the same time
+	// or we might end up with an eternal great battle of supply trucks...
+	while {_repeat} do {
+	
+		_repeat = false;
+
+		// create reinforcements and wait for their arrival (or untimely demise...)
+		
+		private _spawnPos = [_sectorPos, 1800, 2200, _side] call Hz_ambw_fnc_findSpawnPos;
+		
+		_defGroup = createGroup _side;
+		_defGroup deleteGroupWhenEmpty true;
+		_defGroup setVariable ["Hz_defending",true];
+		
+		for "_i" from 1 to (_numDefenders + _numGuns) do {
+			private _dude = _defGroup createUnit [(selectRandom (Hz_ambw_sc_defenderTypes select _sideIndex)), _spawnPos, [], 50, "NONE"];				
+		};
+		
+		_reinforcementVics = [_defGroup, _sectorPos, Hz_ambw_sc_transportVehicleTypes select _sideIndex,Hz_ambw_sc_transportVehicleTypes select _sideIndex,100] call Hz_AI_moveAndCapture;
+
+		private _reinforcementsFooked = false;
+		private _defUnits = [];
+		
+		waitUntil {
+
+			sleep 15;
+			
+			_defUnits = (units _defGroup) select {(alive _x) && {(lifeState _x) != "INCAPACITATED"}};
+
+			if ((({alive _x} count _reinforcementVics) == 0) || {(count _defUnits) == 0}) then {
+				_reinforcementsFooked = true;
+			};		
+			
+			_reinforcementsFooked || {({((vehicle _x) == _x) && {(_x distance _sectorPos) < 200}} count _defUnits) == (count _defUnits)}
+			
+		};
+		
+		if (_reinforcementsFooked) then {
+			_repeat = true;
+		} else {
+			{_defGroup leaveVehicle _x} foreach _reinforcementVics;
+			{
+				_x removeEventHandler ["GetOutMan",_x getvariable ["Hz_getOutMan",9999]];
+				_x removeEventHandler ["GetInMan",_x getvariable ["Hz_getInMan",9999]];
+			} foreach units _defGroup;
+		};
+			
+	};
+
+} else {
+
+	// create defenders and gunners here...
+	_defGroup = createGroup _side;
+	_defGroup deleteGroupWhenEmpty true;
+	_defGroup setVariable ["Hz_defending",true];
+	
+	for "_i" from 1 to (_numDefenders + _numGuns) do {
+		private _dude = _defGroup createUnit [(selectRandom (Hz_ambw_sc_defenderTypes select _sideIndex)), _sectorPos, [], 50, "NONE"];				
+	};
+	
+};
+
+// switch capturing group to new defender group and release patrol group	
+_groupsCapturing set [_sideIndex,(_groupsCapturing select _sideIndex) - [_grp]];
+_grp = _defGroup;
+_groupsCapturing set [_sideIndex,(_groupsCapturing select _sideIndex) + [_grp]];
+_sector set [7,_groupsCapturing];
+Hz_ambw_sc_sectors set [_sectorIndex, _sector];
+publicVariable "Hz_ambw_sc_sectors";
+
+//wait until we are stronger than the enemy within the radius
+_tEnd = time + 10;
+if (call _sleep) exitWith {};
+
+//wait until we are not being attacked
+waitUntil {
+	sleep 5;
+	((time - (_grp getvariable ["Hz_AI_lastCriticalDangerTime",-120])) > 120)	|| {({(alive _x) && {(lifeState _x) != "INCAPACITATED"}} count units _grp) < 1}
+};
+
+//check if still alive -- exit if not
+if (({(alive _x) && {(lifeState _x) != "INCAPACITATED"}} count units _grp) < 1) exitWith {};
+
 //cleanup any remnants of enemy emplacements (t=0)
 private _temp = [];
 {
@@ -116,7 +249,7 @@ if ((count _objects) > 0) then {
 				} foreach crew _obj;
 			};				
 			
-			private _weaponHolders = nearestObjects [_obj,["WeaponHolder"],5];
+			private _weaponHolders = nearestObjects [_obj,["WeaponHolder"],10];
 			{								
 				deletevehicle _x;							
 			} foreach _weaponHolders;		
@@ -131,7 +264,7 @@ if ((count _objects) > 0) then {
 _sector set [6,_objects];
 Hz_ambw_sc_sectors set [_sectorIndex, _sector];
 publicVariable "Hz_ambw_sc_sectors";
-if ((({(alive _x) && {(lifeState _x) != "INCAPACITATED"}} count units _grp) < 1) || {((leader _grp) distance2D _sectorPos) > _radius}) exitWith {};
+if (({(alive _x) && {(lifeState _x) != "INCAPACITATED"}} count units _grp) < 1) exitWith {};
 
 //neutralize flag (t=0)
 _tEnd = time + Hz_ambw_sc_captureTime/4;
@@ -170,7 +303,7 @@ if (!isnull _flag) then {
 	_flagPos = [_sectorPos,10] call Hz_ambw_fnc_findSafePos;
 };
 
-if ((({(alive _x) && {(lifeState _x) != "INCAPACITATED"}} count units _grp) < 1) || {((leader _grp) distance2D _sectorPos) > _radius}) exitWith {};
+if (({(alive _x) && {(lifeState _x) != "INCAPACITATED"}} count units _grp) < 1) exitWith {};
 
 _flag = (Hz_ambw_sc_flagTypes select _sideIndex) createVehicle [-5000,-5000,50000];
 _flag setPosATL _flagPos;
@@ -208,16 +341,19 @@ _nearFriendlyPlayers = _nearFriendlyPlayers apply {effectiveCommander _x};
 	};
 } foreach _nearFriendlyPlayers;
 
-private _defGroup = grpNull;
+
+private _availableUnits = [];
 
 //build guns
-private _numGuns = Hz_ambw_sc_staticCountMin max (round random Hz_ambw_sc_staticCountMax);
-
 if (_numGuns > 0) then {
 
 	private _t = (Hz_ambw_sc_captureTime/4)/_numGuns;
 
 	for "_i" from 1 to _numGuns do {
+	
+		_availableUnits = (units _defGroup) select {(alive _x) && {(lifeState _x) != "INCAPACITATED"} && {!(_x getVariable ["Hz_busy", false])}};
+		
+		if ((count _availableUnits) < 1) exitWith {};
 		
 		_tEnd = time + _t;		
 		if (call _sleep) exitWith {};
@@ -228,18 +364,21 @@ if (_numGuns > 0) then {
 		_gun setDir ((_gunPos getDir _flag) + 180);
 		_gun setVehicleLock "LOCKED";
 		_gun enableWeaponDisassembly false;
+		_gun spawn {
+			sleep 5;
+			{deletevehicle _x} foreach (nearestObjects [_this, ["WeaponHolder"], 10]);
+		};
 		
 		_objects pushBack _gun;
 		
-		if (isNull _defGroup) then {
-			_defGroup = createGroup _side;
-			_defGroup deleteGroupWhenEmpty true;
-			_defGroup setVariable ["Hz_defending",true];
-		};	
-		private _dude = _defGroup createUnit [(selectRandom (Hz_ambw_sc_defenderTypes select _sideIndex)), _gunPos, [], 100, "NONE"];
-		_dude assignAsGunner _gun;
-		_dude moveInGunner _gun;
+		_availableUnits = (units _defGroup) select {(alive _x) && {(lifeState _x) != "INCAPACITATED"} && {!(_x getVariable ["Hz_busy", false])}};
 		
+		if ((count _availableUnits) > 0) then {
+			private _dude = selectRandom _availableUnits;
+			_dude setVariable ["Hz_busy", true];
+			[_dude, _gun] spawn _moveToPositionOrGun;
+		};
+				
 	};
 
 };
@@ -248,12 +387,11 @@ _sector set [6,_objects];
 Hz_ambw_sc_sectors set [_sectorIndex, _sector];
 publicVariable "Hz_ambw_sc_sectors";
 
-if ((({(alive _x) && {(lifeState _x) != "INCAPACITATED"}} count units _grp) < 1) || {((leader _grp) distance2D _sectorPos) > _radius}) exitWith {};
+if (({(alive _x) && {(lifeState _x) != "INCAPACITATED"}} count units _grp) < 1) exitWith {};
 
 //build emplacements
 private _numEmplacements = Hz_ambw_sc_emplacementCountMin max (round random Hz_ambw_sc_emplacementCountMax);
 
-_attacked = false;
 private _emplacementBuildingPos = [];
 private _emplacements = [];
 
@@ -264,9 +402,7 @@ if (_numEmplacements > 0) then {
 	for "_i" from 1 to _numEmplacements do {
 		
 		_tEnd = time + _t;		
-		if (call _sleep) exitWith {
-			_attacked = true;
-		};
+		if (call _sleep) exitWith {};
 		
 		private _empPos = [_sectorPos, 20] call Hz_ambw_fnc_findSafePos;	
 		private _emp = (selectRandom (Hz_ambw_sc_fortificationTypes select _sideIndex)) createVehicle _empPos;
@@ -286,56 +422,43 @@ if (_numEmplacements > 0) then {
 
 _sector set [6,_objects];
 
-if (!_attacked) then {
+//set up defending infantry
 
-	//create defenders
-	private _numDefenders = Hz_ambw_sc_defenderCountMin max (round random Hz_ambw_sc_defenderCountMax);
+if (_numDefenders > 0) then {
 
-	if (_numDefenders > 0) then {
+	_emplacements = _emplacements select {(count (_x nearEntities ["CAManBase", 10])) == 0};
 	
-		_emplacements = _emplacements select {(count (_x nearEntities ["CAManBase", 10])) == 0};
-
-		for "_i" from 1 to _numDefenders do {
+	while {true} do {
 			
-			if (isNull _defGroup) then {
-				_defGroup = createGroup _side;
-				_defGroup deleteGroupWhenEmpty true;
-				_defGroup setVariable ["Hz_defending",true];
-			};	
-			private _dude = _defGroup createUnit [(selectRandom (Hz_ambw_sc_defenderTypes select _sideIndex)), _sectorPos, [], 50, "NONE"];
-			
-			if ((count _emplacementBuildingPos) > 0) then {
-				private _pos = selectRandom _emplacementBuildingPos;
-				_dude setPosATL _pos;
-				_emplacementBuildingPos = _emplacementBuildingPos - [_pos];
-				_dude setVariable ["Hz_noMove",true];
-				_dude disableAI "PATH";
-				_dude forcespeed 0;
-				dostop _dude;
-			} else {
-				if ((count _emplacements) > 0) then {
-					private _emp = selectRandom _emplacements;
-					_emplacements = _emplacements - [_emp];
-					private _empPos = getpos _emp;
-					private _bbox = boundingBoxReal _emp;
-					private _delta = (((_bbox select 0) distance2D (_bbox select 1))/2) + 1.3;
-					private _pos = [_empPos, _delta, [_empPos, _flag] call BIS_fnc_dirTo] call BIS_fnc_relPos;
-					_pos set [2, 0];
-					_dude setPosATL _pos;
-					_dude setVariable ["Hz_noMove",true];
-					_dude disableAI "PATH";
-					_dude forcespeed 0;
-					dostop _dude;
-				};
-			};			
-		};
-
+		_availableUnits = (units _defGroup) select {(alive _x) && {(lifeState _x) != "INCAPACITATED"} && {!(_x getVariable ["Hz_busy", false])}};
+		
+		if ((count _availableUnits) < 1) exitWith {};
+				
+		private _dude = selectRandom _availableUnits;
+		_dude setVariable ["Hz_busy", true];
+		
+		if ((count _emplacementBuildingPos) > 0) then {
+			private _pos = selectRandom _emplacementBuildingPos;
+			_emplacementBuildingPos = _emplacementBuildingPos - [_pos];
+			[_dude, _pos] spawn _moveToPositionOrGun;
+		} else {
+			if ((count _emplacements) > 0) then {
+				private _emp = selectRandom _emplacements;
+				_emplacements = _emplacements - [_emp];
+				private _empPos = getpos _emp;
+				private _bbox = boundingBoxReal _emp;
+				private _delta = (((_bbox select 0) distance2D (_bbox select 1))/2) + 0.3;
+				private _pos = [_empPos, _delta, [_empPos, _flag] call BIS_fnc_dirTo] call BIS_fnc_relPos;
+				_pos set [2, 0];
+				[_dude, _pos] spawn _moveToPositionOrGun;
+			};
+		};			
 	};
 
 };
 
-//return to patrol
 
+// remove defender group from capture list
 _groupsCapturing set [_sideIndex,(_groupsCapturing select _sideIndex) - [_grp]];
 _sector set [7,_groupsCapturing];
 Hz_ambw_sc_sectors set [_sectorIndex, _sector];
