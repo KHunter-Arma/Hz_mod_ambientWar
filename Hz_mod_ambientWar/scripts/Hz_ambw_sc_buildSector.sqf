@@ -130,6 +130,7 @@ private _reinforcementVics = [];
 private _numDefenders = Hz_ambw_sc_defenderCountMin max (round random Hz_ambw_sc_defenderCountMax);
 private _numGuns = Hz_ambw_sc_staticCountMin max (round random Hz_ambw_sc_staticCountMax);
 private _defGroup = grpNull;
+private _reinforcementsFooked = false;
 
 if (_useRealisticSectorBuildUp) then {
 
@@ -155,7 +156,7 @@ if (_useRealisticSectorBuildUp) then {
 		
 		_reinforcementVics = [_defGroup, _sectorPos, Hz_ambw_sc_transportVehicleTypes select _sideIndex,Hz_ambw_sc_transportVehicleTypes select _sideIndex,100] call Hz_AI_moveAndCapture;
 
-		private _reinforcementsFooked = false;
+		_reinforcementsFooked = false;
 		private _defUnits = [];
 		
 		waitUntil {
@@ -173,6 +174,9 @@ if (_useRealisticSectorBuildUp) then {
 		};
 		
 		if (_reinforcementsFooked) then {
+			// have a delay before sending new reinforcements and check if capturing group is still alive (don't send otherwise)
+			_tEnd = time + 600;
+			if (call _sleep) exitWith {};
 			_repeat = true;
 		} else {
 			{_defGroup leaveVehicle _x} foreach _reinforcementVics;
@@ -197,6 +201,8 @@ if (_useRealisticSectorBuildUp) then {
 	
 };
 
+if (_reinforcementsFooked) exitWith {};
+
 // switch capturing group to new defender group and release patrol group	
 _groupsCapturing set [_sideIndex,(_groupsCapturing select _sideIndex) - [_grp]];
 _grp = _defGroup;
@@ -205,18 +211,11 @@ _sector set [7,_groupsCapturing];
 Hz_ambw_sc_sectors set [_sectorIndex, _sector];
 publicVariable "Hz_ambw_sc_sectors";
 
-//wait until we are stronger than the enemy within the radius
+//wait until we are stronger than the enemy within the radius and are not being attacked
 _tEnd = time + 10;
 if (call _sleep) exitWith {};
 
-//wait until we are not being attacked
-waitUntil {
-	sleep 5;
-	((time - (_grp getvariable ["Hz_AI_lastCriticalDangerTime",-120])) > 120)	|| {({(alive _x) && {(lifeState _x) != "INCAPACITATED"}} count units _grp) < 1}
-};
-
-//check if still alive -- exit if not
-if (({(alive _x) && {(lifeState _x) != "INCAPACITATED"}} count units _grp) < 1) exitWith {};
+private _exit = false;
 
 //cleanup any remnants of enemy emplacements (t=0)
 private _temp = [];
@@ -228,8 +227,10 @@ private _temp = [];
 _objects = _temp;
 if ((count _objects) > 0) then {
 	{
-		if (({(alive _x) && {(lifeState _x) != "INCAPACITATED"}} count units _grp) < 1) exitWith {};
 		private _obj = _x;
+		
+		if (_exit) exitWith {};
+		
 		if (alive _obj) then {
 			if ((count crew _obj) > 0) then {
 				{
@@ -257,14 +258,15 @@ if ((count _objects) > 0) then {
 			_objects = _objects - [_obj];			
 			deleteVehicle _obj;
 			_tEnd = time + 9;
-			call _sleep;
+			_exit = call _sleep;
 		};
 	} foreach _objects;
 };
 _sector set [6,_objects];
 Hz_ambw_sc_sectors set [_sectorIndex, _sector];
 publicVariable "Hz_ambw_sc_sectors";
-if (({(alive _x) && {(lifeState _x) != "INCAPACITATED"}} count units _grp) < 1) exitWith {};
+
+if (_exit) exitWith {};
 
 //neutralize flag (t=0)
 _tEnd = time + Hz_ambw_sc_captureTime/4;
@@ -297,13 +299,13 @@ if (!isnull _flag) then {
 	} foreach _nearFriendlyPlayers;
 	
 	_tEnd = time + Hz_ambw_sc_captureTime/4;
-	if (call _sleep) exitWith {};
+	_exit = call _sleep;
 	
 } else {
 	_flagPos = [_sectorPos,10] call Hz_ambw_fnc_findSafePos;
 };
 
-if (({(alive _x) && {(lifeState _x) != "INCAPACITATED"}} count units _grp) < 1) exitWith {};
+if (_exit) exitWith {};
 
 _flag = (Hz_ambw_sc_flagTypes select _sideIndex) createVehicle [-5000,-5000,50000];
 _flag setPosATL _flagPos;
@@ -356,7 +358,7 @@ if (_numGuns > 0) then {
 		if ((count _availableUnits) < 1) exitWith {};
 		
 		_tEnd = time + _t;		
-		if (call _sleep) exitWith {};
+		_exit = call _sleep;
 		
 		private _gunPos = [_sectorPos, 20] call Hz_ambw_fnc_findSafePos;	
 		private _gun = (selectRandom (Hz_ambw_sc_staticTypes select _sideIndex)) createVehicle _gunPos;
@@ -387,7 +389,7 @@ _sector set [6,_objects];
 Hz_ambw_sc_sectors set [_sectorIndex, _sector];
 publicVariable "Hz_ambw_sc_sectors";
 
-if (({(alive _x) && {(lifeState _x) != "INCAPACITATED"}} count units _grp) < 1) exitWith {};
+if (_exit) exitWith {};
 
 //build emplacements
 private _numEmplacements = Hz_ambw_sc_emplacementCountMin max (round random Hz_ambw_sc_emplacementCountMax);
@@ -402,7 +404,7 @@ if (_numEmplacements > 0) then {
 	for "_i" from 1 to _numEmplacements do {
 		
 		_tEnd = time + _t;		
-		if (call _sleep) exitWith {};
+		_exit = call _sleep;
 		
 		private _empPos = [_sectorPos, 20] call Hz_ambw_fnc_findSafePos;	
 		private _emp = (selectRandom (Hz_ambw_sc_fortificationTypes select _sideIndex)) createVehicle _empPos;
