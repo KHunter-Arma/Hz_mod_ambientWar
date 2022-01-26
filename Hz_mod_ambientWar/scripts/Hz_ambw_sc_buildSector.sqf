@@ -169,7 +169,7 @@ if (_useRealisticSectorBuildUp) then {
 				_reinforcementsFooked = true;
 			};		
 			
-			_reinforcementsFooked || {({((vehicle _x) == _x) && {(_x distance _sectorPos) < 200}} count _defUnits) == (count _defUnits)}
+			_reinforcementsFooked || {({((vehicle _x) == _x) && {(_x distance _sectorPos) < 200}} count _defUnits) >= ((count _defUnits)/2)}
 			
 		};
 		
@@ -179,7 +179,6 @@ if (_useRealisticSectorBuildUp) then {
 			if (call _sleep) exitWith {};
 			_repeat = true;
 		} else {
-			{_defGroup leaveVehicle _x} foreach _reinforcementVics;
 			{
 				_x removeEventHandler ["GetOutMan",_x getvariable ["Hz_getOutMan",9999]];
 				_x removeEventHandler ["GetInMan",_x getvariable ["Hz_getInMan",9999]];
@@ -224,7 +223,16 @@ private _temp = [];
 		_temp pushBack _x;
 	};
 } foreach _objects;
+
+// also cleanup any supply trucks from previous sector buildups, but leave ones that are damaged for ambience :)
+{
+	if (canMove _x) then {
+		_temp pushBack _x;
+	};
+} foreach (_sectorPos nearEntities [[(Hz_ambw_sc_transportVehicleTypes select 0) + (Hz_ambw_sc_transportVehicleTypes select 1) + (Hz_ambw_sc_transportVehicleTypes select 2)], 300]);
+
 _objects = _temp;
+
 if ((count _objects) > 0) then {
 	{
 		private _obj = _x;

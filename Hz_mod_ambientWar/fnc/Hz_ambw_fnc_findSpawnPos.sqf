@@ -11,7 +11,7 @@
 #define MIN_1D_DISTANCE_FROM_PLAYER 1400
 #define MIN_DISTANCE_FROM_OBJECTS 10
 
-private ["_targetpos", "_minDistance", "_maxDistance", "_side", "_sidesToAvoid", "_maxDistanceStart", "_blacklistpos", "_unitarray", "_playerPositions", "_player", "_playerpos", "_marker1", "_marker2", "_results", "_spawnpos", "_tries", "_safetyFactors", "_nearEntities", "_minEnemies", "_minTotal", "_returnIndex"];
+private ["_targetpos", "_minDistance", "_maxDistance", "_side", "_sidesToAvoid", "_maxDistanceStart", "_blacklistpos", "_unitarray", "_playerPositions", "_player", "_marker1", "_marker2", "_results", "_spawnpos", "_tries", "_safetyFactors", "_nearEntities", "_minEnemies", "_minTotal", "_returnIndex"];
 
 _targetpos = _this select 0;
 _minDistance = _this select 1;
@@ -21,6 +21,14 @@ _maxDistance = _minDistance + 500;
 _maxDistance = _this select 2;
 _side = _this select 3;
 
+private _addBlacklistPos = {
+		
+	_marker1 = [(_this select 0)-MIN_1D_DISTANCE_FROM_PLAYER,(_this select 1)+MIN_1D_DISTANCE_FROM_PLAYER];
+	_marker2 = [(_this select 0)+MIN_1D_DISTANCE_FROM_PLAYER,(_this select 1)-MIN_1D_DISTANCE_FROM_PLAYER];
+	_blacklistpos pushBack [_marker1,_marker2];
+
+};
+
 //figure out sides to avoid (assuming everyone's friendly with civilian side...)
 _sidesToAvoid = [];
 {
@@ -29,9 +37,50 @@ _sidesToAvoid = [];
 	};
 } foreach [east, west, resistance];
 
+_blacklistpos = [];
+
+
+// avoid spawning them near respawn areas of enemy or neutral factions
+if (east in _sidesToAvoid) then {
+	if (!((markerpos "respawn_east") isEqualTo [0,0,0])) then {
+		(markerpos "respawn_east") call _addBlacklistPos;
+	};
+	if (!((markerpos "respawn_vehicle_east") isEqualTo [0,0,0])) then {
+		(markerpos "respawn_vehicle_east") call _addBlacklistPos;
+	};
+};
+
+if (west in _sidesToAvoid) then {
+	if (!((markerpos "respawn_west") isEqualTo [0,0,0])) then {
+		(markerpos "respawn_west") call _addBlacklistPos;
+	};
+	if (!((markerpos "respawn_vehicle_west") isEqualTo [0,0,0])) then {
+		(markerpos "respawn_vehicle_west") call _addBlacklistPos;
+	};
+};
+
+if (resistance in _sidesToAvoid) then {
+	if (!((markerpos "respawn_guerrila") isEqualTo [0,0,0])) then {
+		(markerpos "respawn_guerrila") call _addBlacklistPos;
+	};
+	if (!((markerpos "respawn_vehicle_guerrila") isEqualTo [0,0,0])) then {
+		(markerpos "respawn_vehicle_guerrila") call _addBlacklistPos;
+	};
+};
+
+if (!((markerpos "respawn") isEqualTo [0,0,0])) then {
+	(markerpos "respawn") call _addBlacklistPos;
+};
+
+if (!((markerpos "respawn_civilian") isEqualTo [0,0,0])) then {
+	(markerpos "respawn_civilian") call _addBlacklistPos;
+};
+if (!((markerpos "respawn_vehicle_civilian") isEqualTo [0,0,0])) then {
+	(markerpos "respawn_vehicle_civilian") call _addBlacklistPos;
+};
+
 _maxDistanceStart = _maxDistance;
 
-_blacklistpos = [[markerpos "blacklist1",markerpos "blacklist2"]];
 _unitarray = [];
 _playerPositions = [];
 
@@ -49,14 +98,8 @@ _playerPositions = [];
 }foreach playableunits;
 
 {
-	if(((_x distance _targetpos) > 1000) && {(speed (vehicle _x)) < 20}) then {
-			
-		_playerpos = getpos _x;        
-								
-		_marker1 = [(_playerpos select 0)-MIN_1D_DISTANCE_FROM_PLAYER,(_playerpos select 1)+MIN_1D_DISTANCE_FROM_PLAYER];
-		_marker2 = [(_playerpos select 0)+MIN_1D_DISTANCE_FROM_PLAYER,(_playerpos select 1)-MIN_1D_DISTANCE_FROM_PLAYER];
-		_blacklistpos set [count _blacklistpos, [_marker1,_marker2]];
-		
+	if(((_x distance _targetpos) > 1000) && {(speed (vehicle _x)) < 20}) then {			
+		(getpos _x) call _addBlacklistPos;		
 	};
 }foreach _unitarray;
 
