@@ -229,7 +229,7 @@ private _temp = [];
 	if (canMove _x) then {
 		_temp pushBack _x;
 	};
-} foreach (_sectorPos nearEntities [[(Hz_ambw_sc_transportVehicleTypes select 0) + (Hz_ambw_sc_transportVehicleTypes select 1) + (Hz_ambw_sc_transportVehicleTypes select 2)], 300]);
+} foreach (_sectorPos nearEntities [(Hz_ambw_sc_transportVehicleTypes select 0) + (Hz_ambw_sc_transportVehicleTypes select 1) + (Hz_ambw_sc_transportVehicleTypes select 2), 300]);
 
 _objects = _temp;
 
