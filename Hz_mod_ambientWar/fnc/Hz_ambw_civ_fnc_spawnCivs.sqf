@@ -235,11 +235,11 @@ for "_i" from 1 to _num do {
     
     _civ setskill 0.2;
 		_civ allowFleeing 0.5;
-    _civ setskill ["aimingSpeed",0.6];
-    _civ setskill ["aimingShake",0.02];
+    _civ setskill ["aimingSpeed",0.4];
+    _civ setskill ["aimingShake",0.01];
     _civ setskill ["reloadSpeed",0.2];
     _civ setskill ["spotDistance",0.2];
-    _civ setskill ["aimingAccuracy",0.02];
+    _civ setskill ["aimingAccuracy",0.005];
     _civ setskill ["spotTime",1];    
 		
     removeAllWeapons _civ;
@@ -265,7 +265,16 @@ for "_i" from 1 to _num do {
 				_civ addMagazine "IEDUrbanBig_Remote_Mag";			
 				[_civ,[Hz_ambw_armedCivilianTargetSide],"IEDUrbanBig_Remote_Ammo",Hz_ambw_armedCivilianSide] spawn Hz_ambw_civ_suicideBomber;
 			} else {
-				[_civ,[Hz_ambw_armedCivilianTargetSide],"IEDUrbanSmall_Remote_Mag",Hz_ambw_armedCivilianSide] spawn Hz_ambw_civ_suicideBomber;
+				_civ addMagazine "IEDUrbanSmall_Remote_Mag";
+				_civ spawn {
+					sleep 1;
+					if ("IEDUrbanSmall_Remote_Mag" in (magazines _this)) then {
+						[_this,[Hz_ambw_armedCivilianTargetSide],"IEDUrbanSmall_Remote_Mag",Hz_ambw_armedCivilianSide] spawn Hz_ambw_civ_suicideBomber;
+					} else {
+						_this addMagazines ["HandGrenade", 20];
+						[_this,[Hz_ambw_armedCivilianTargetSide],"HandGrenade",Hz_ambw_armedCivilianSide] spawn Hz_ambw_civ_suicideBomber;
+					};
+				};				
 			};	
 			
 			// get rid of initial "weapon on back" animation at spawn...
