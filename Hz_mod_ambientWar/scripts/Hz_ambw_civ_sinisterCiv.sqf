@@ -68,8 +68,11 @@ while {alive _civ} do {
   _grp setvariable ["Hz_AI_lastCriticalDangerTime",time];
   _grp setvariable ["Hz_AI_lastDangerTime",time];
   _grp setBehaviour "COMBAT";
+	
+	for [{_idx_muzzle = 0}, {currentWeapon _civ != handgunWeapon _civ}, {_idx_muzzle = _idx_muzzle+1}] do {
+		_civ action ["SWITCHWEAPON", _civ, _civ, _idx_muzzle];
+	};
 	_civ selectWeapon (handgunWeapon _civ);
-	_civ action ['SwitchWeapon', _civ, _civ, 0];
   
   waitUntil {
   

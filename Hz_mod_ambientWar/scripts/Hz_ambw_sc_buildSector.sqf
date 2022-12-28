@@ -155,6 +155,10 @@ if (_useRealisticSectorBuildUp) then {
 		};
 		
 		_reinforcementVics = [_defGroup, _sectorPos, Hz_ambw_sc_transportVehicleTypes select _sideIndex,Hz_ambw_sc_transportVehicleTypes select _sideIndex,100] call Hz_AI_moveAndCapture;
+		
+		{
+			_x setVariable ["Hz_ambw_sc_isReinforcementVehicle", true];
+		} foreach _reinforcementVics;
 
 		_reinforcementsFooked = false;
 		private _defUnits = [];
@@ -226,10 +230,10 @@ private _temp = [];
 
 // also cleanup any supply trucks from previous sector buildups, but leave ones that are damaged for ambience :)
 {
-	if (canMove _x) then {
+	if ((canMove _x) && {!(_x in _reinforcementVics)} && {_x getVariable ["Hz_ambw_sc_isReinforcementVehicle", false]}) then {
 		_temp pushBack _x;
 	};
-} foreach (_sectorPos nearEntities [(Hz_ambw_sc_transportVehicleTypes select 0) + (Hz_ambw_sc_transportVehicleTypes select 1) + (Hz_ambw_sc_transportVehicleTypes select 2), 300]);
+} foreach (_sectorPos nearEntities ["LandVehicle", 300]);
 
 _objects = _temp;
 
