@@ -42,7 +42,7 @@ while {(alive _bomber) && {!_exit}} do {
 			
 		};
 		
-    if((alive _bomber) && {!(_bomber call Hz_ambw_fnc_isUncon)} && {({(side _x) in _targetSides} count nearestobjects [_bomber,["LandVehicle","CAManBase"],15] ) > 0}) exitWith {
+    if((alive _bomber) && {!(_bomber call Hz_ambw_fnc_isUncon)} && {!captive _bomber} && {({(side _x) in _targetSides} count nearestobjects [_bomber,["LandVehicle","CAManBase"],15] ) > 0}) exitWith {
       
 			_exit = true;
       
@@ -74,7 +74,7 @@ while {(alive _bomber) && {!_exit}} do {
         _bomber disableAI "MOVE";				
         uisleep 0.5;
 				
-				if ((alive _bomber) && {!(_bomber call Hz_ambw_fnc_isUncon)}) then {
+				if ((alive _bomber) && {!(_bomber call Hz_ambw_fnc_isUncon)} && {!captive _bomber}) then {
 					[_bomber,"AmovPercMstpSsurWnonDnon"] remoteExecCall ["switchMove",0,false];
 					_bomber disableAI "anim";
 				};
@@ -83,7 +83,7 @@ while {(alive _bomber) && {!_exit}} do {
 				
 				_bgroup deleteGroupWhenEmpty true;
         
-        if ((alive _bomber) && {!(_bomber call Hz_ambw_fnc_isUncon)}) then {
+        if ((alive _bomber) && {!(_bomber call Hz_ambw_fnc_isUncon)} && {!captive _bomber}) then {
 				
 					_explosiveCount = {_x == _explosiveType} count (magazines _bomber);
 					
