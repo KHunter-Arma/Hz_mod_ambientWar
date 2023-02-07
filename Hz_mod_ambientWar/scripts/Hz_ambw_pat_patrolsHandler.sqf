@@ -1,5 +1,5 @@
 /*******************************************************************************
-* Copyright (C) 2018-2020 K.Hunter
+* Copyright (C) 2018-2023 K.Hunter
 *
 * This file is licensed under a Creative Commons
 * Attribution-NonCommercial-ShareAlike 4.0 International License.
@@ -128,9 +128,15 @@ while {true} do {
 			
 			_randomPatrol = _patrolArray select _randomIndex; 
 			
-			_mpos = markerpos (_randomPatrol select 2);
+			_mpos = [];
 			
-			if (({(_mpos distance _x) < 3000} count playableunits) < 1) exitWith {
+			if ((typeName (_randomPatrol select 2)) == "STRING") then {
+				_mpos = markerpos (_randomPatrol select 2);
+			} else {
+				_mpos = markerpos (selectRandom (_randomPatrol select 2));
+			};
+			
+			if (({(_mpos distance _x) < 3500} count playableunits) < 1) exitWith {
 				
 				_randomPatrol spawn Hz_ambw_pat_spawnPatrol;
 				_randomIndex = Hz_ambw_pat_patrolsArray find _randomPatrol;

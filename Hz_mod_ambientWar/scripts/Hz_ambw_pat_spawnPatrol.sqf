@@ -1,5 +1,5 @@
 /*******************************************************************************
-* Copyright (C) 2020 K.Hunter
+* Copyright (C) 2020-2023 K.Hunter
 *
 * This file is licensed under a Creative Commons
 * Attribution-NonCommercial-ShareAlike 4.0 International License.
@@ -9,10 +9,18 @@
 * https://creativecommons.org/licenses/by-nc-sa/4.0/
 *******************************************************************************/
 
-params ["_unitType", "_respawnPosition", "_patrolMarker", "_side", "_crewAndPassengerTypes", "_infantryTypes"];
+params ["_unitType", "_respawnPosInfo", "_patrolMarker", "_side", "_crewAndPassengerTypes", "_infantryTypes"];
 
 private _signx = if ((random 1) < 0.5) then {-1} else {1};
 private _signy = if ((random 1) < 0.5) then {-1} else {1};
+
+private _respawnPosition = "";
+
+if ((typeName _respawnPosInfo) == "STRING") then {
+	_respawnPosition = _respawnPosInfo;
+} else {
+	_respawnPosition = selectRandom (_respawnPosInfo select {private _mpos = markerpos _x; ({(_mpos distance _x) < 3400} count playableunits) < 1});
+};
 
 //TODO: Find safe pos
 private _respawnArea = [(((markerPos _respawnPosition) select 0) + (random 715)*_signx),(((markerPos _respawnPosition) select 1) + (random 715)*_signy),0];
@@ -142,4 +150,4 @@ if (alive _vehicle) then {
 	Hz_ambw_pat_deleteVehicles pushBack _vehicle;
 };
 
-Hz_ambw_pat_patrolsArray pushBack [_unitType, _respawnPosition, _patrolMarker, _side, _crewAndPassengerTypes,_infantryTypes];
+Hz_ambw_pat_patrolsArray pushBack [_unitType, _respawnPosInfo, _patrolMarker, _side, _crewAndPassengerTypes,_infantryTypes];
