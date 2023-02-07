@@ -1,5 +1,5 @@
 /*******************************************************************************
-* Copyright (C) 2020 K.Hunter
+* Copyright (C) 2020-2023 K.Hunter
 *
 * This file is licensed under a Creative Commons
 * Attribution-NonCommercial-ShareAlike 4.0 International License.
@@ -378,6 +378,7 @@ if (_numGuns > 0) then {
 		_gun setDir ((_gunPos getDir _flag) + 180);
 		_gun setVehicleLock "LOCKED";
 		_gun enableWeaponDisassembly false;
+		_gun setVariable ["ace_dragging_canDrag", false, true];
 		_gun spawn {
 			sleep 5;
 			{deletevehicle _x} foreach (nearestObjects [_this, ["WeaponHolder"], 10]);
