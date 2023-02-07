@@ -1,5 +1,5 @@
 /*******************************************************************************
-* Copyright (C) 2018 K.Hunter
+* Copyright (C) 2018-2023 K.Hunter
 *
 * This file is licensed under a Creative Commons
 * Attribution-NonCommercial-ShareAlike 4.0 International License.
@@ -31,6 +31,7 @@ if (isServer) then {
 	publicVariable "Hz_ambw_srel_relationsOwnSideStarting";
 	publicVariable "Hz_ambw_srel_relationsCivilianStarting";
 
+	//currently designed to be capped between 1 and 150 (representing 1-150%, 0 not allowed)
 	Hz_ambw_srel_relationsOwnSide = Hz_ambw_srel_relationsOwnSideStarting;
 	Hz_ambw_srel_relationsCivilian = Hz_ambw_srel_relationsCivilianStarting;
 	publicVariable "Hz_ambw_srel_relationsOwnSide";
