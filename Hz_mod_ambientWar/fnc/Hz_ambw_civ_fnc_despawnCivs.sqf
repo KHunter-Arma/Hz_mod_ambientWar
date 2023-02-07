@@ -1,5 +1,5 @@
 /*******************************************************************************
-* Copyright (C) 2018 K.Hunter
+* Copyright (C) 2018-2023 K.Hunter
 *
 * This file is licensed under a Creative Commons
 * Attribution-NonCommercial-ShareAlike 4.0 International License.
@@ -59,19 +59,14 @@
 	Hz_ambw_currentNumberOfCiviliansSpawned = Hz_ambw_currentNumberOfCiviliansSpawned - _count;
 
 	//Clean civarray; delete all civilians that are alive. Leave the already dead for added ambiance. 
-
-	_killcivs = [];
-	{if(alive _x) then {_killcivs set [count _killcivs,_x];};}foreach _civarray;
-
-	//{_x setdamage 1;}foreach _killcivs;
-	{	
+	{
 		_veh = vehicle _x;
 		if (_veh == _x) then {							
 			deletevehicle _x;							
 		} else {							
 			_veh deleteVehicleCrew _x;							
 		};
-	} foreach _killcivs;
+	} foreach (_civarray select {(alive _x) && {!(_x getVariable ["Hz_ambw_civ_doNotDelete", false])}});
 
 	_civarray = [];	
 	

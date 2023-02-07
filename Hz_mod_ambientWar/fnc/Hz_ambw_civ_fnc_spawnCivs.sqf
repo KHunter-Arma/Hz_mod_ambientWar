@@ -1,5 +1,5 @@
 /*******************************************************************************
-* Copyright (C) 2018 K.Hunter
+* Copyright (C) 2018-2023 K.Hunter
 *
 * This file is licensed under a Creative Commons
 * Attribution-NonCommercial-ShareAlike 4.0 International License.
@@ -17,7 +17,7 @@
 
 if (Hz_ambw_civ_debug) exitWith {_this spawn Hz_ambw_civ_fnc_spawnCivs;};
 
-private ["_ForceSpawnAtHouses","_numinput","_mutex","_exit","_civarray","_num","_count","_newcivarray","_roadarr","_client","_civtype","_group","_civ","_road","_spawnpos","_buildings","_group1","_group2","_group3","_civgroups","_killcivs","_trigger","_pos","_radius","_ownerIDs"];
+private ["_ForceSpawnAtHouses","_numinput","_mutex","_exit","_civarray","_num","_count","_newcivarray","_spawnObjects","_client","_civtype","_group","_civ","_road","_spawnpos","_buildings","_group1","_group2","_group3","_civgroups","_killcivs","_trigger","_pos","_radius","_ownerIDs"];
 
 if (Hz_ambw_civ_debug) then {hint "inside main script";};
 
@@ -64,7 +64,7 @@ if(Hz_ambw_enableClientProcessing) then {
 };
 
 //Determine number of civs to spawn for this location
-_buildings = nearestObjects [_pos, ["House"], _radius];
+_buildings = (nearestObjects [_pos, ["House"], _radius]) select {(getDammage _x) < 0.75};
 _count = count _buildings;
 _num = 0;
 if (_numinput > 0) then {
@@ -112,26 +112,22 @@ _group3 = creategroup civilian;
 
 _civgroups = [_group1,_group2,_group3];
 
-{
-	_x deleteGroupWhenEmpty true;
-} foreach _civgroups;
-
 _civ = objNull;
 
 //Find near roads
-_roadarr = [];
+_spawnObjects = [];
 if(_ForceSpawnAtHouses)then {
 
-  _roadarr = nearestobjects [_pos,["House"],_radius];  
+  _spawnObjects = _buildings;  
   
 } else {
 
-  _roadarr = _pos nearroads _radius;   
+  _spawnObjects = _pos nearroads _radius;   
 
-  if ((count _roadarr) < 100) then {
+  if ((count _spawnObjects) < 100) then {
     
     _ForceSpawnAtHouses = true;
-    _roadarr = nearestobjects [_pos,["House"],_radius];  
+    _spawnObjects = _buildings;  
     
   };
   
@@ -139,46 +135,27 @@ if(_ForceSpawnAtHouses)then {
 
 //filter
 _thisList = [];
-_temp = +(list _trigger);
 {
-  _veh = vehicle _x;    
-  
-  if (!(_veh in _thisList)) then {_thisList pushBack _veh;};
-  
-} foreach _temp;
+  _thisList pushBackUnique (vehicle _x);
+} foreach (list _trigger);
 
-
-_temp = +_roadarr;
-{
-  
-  _remove = false;
-  
-  {
-    
-    if (_x in _thisList) exitWith {_remove = true;};
-    
-  } foreach (nearestobjects [_x,["CAManBase","LandVehicle"],SAFE_DISTANCE_FOR_SPAWN]);
-  
-  if (_remove) then {_roadarr = _roadarr - [_x];};
-  
-} foreach _temp;  
+_spawnObjects = _spawnObjects select {
+	private _obj = _x;
+	({(_x distance2D _obj) < SAFE_DISTANCE_FOR_SPAWN} count _thisList) == 0
+};
 
 _bPosArr = [];
 
 if (_ForceSpawnAtHouses) then {
   
   //get a list of spawn positions from "houses" with at least 3 bpos		
-  {
-    
+  {    
     _bPos = _x buildingPos -1;
 
-    if ((count _bPos) > 2) then {
-      
-      _bPosArr = _bPosArr + _bPos;
-      
-    };
-    
-  } foreach _roadarr;
+    if ((count _bPos) > 2) then {      
+      _bPosArr = _bPosArr + _bPos;      
+    };    
+  } foreach _spawnObjects;
   
   //check if we have enough bPoses
   _bposCount = count _bposArr;
@@ -189,9 +166,8 @@ if (_ForceSpawnAtHouses) then {
     for "_i" from 1 to _bposCount do {
       
       //add some filler spawn positions
-      _house = selectRandom _roadarr;
-      _fillerPos = [[(getpos _house) select 0,(getpos _house) select 1, 0],50,1,0] call mps_getFlatArea;
-      
+      _house = selectRandom _spawnObjects;
+      _fillerPos = [_house, 0, 50, 10, 0, 0, 0, [], [getpos _house, [0,0,0]]] call BIS_fnc_findSafePos;
       _bposArr pushback _fillerPos;
       
     };
@@ -209,9 +185,9 @@ for "_i" from 1 to _num do {
   if (!_ForceSpawnAtHouses) then {
     
     //Choose random road. Try and make them spawn on the side rather than in the middle
-    _road = selectRandom _roadarr;
+    _road = selectRandom _spawnObjects;
     
-    _roadarr = _roadarr - [_road];
+    _spawnObjects = _spawnObjects - [_road];
     
     _spawnpos = (boundingbox _road) select 0;
     _spawnpos = _road modeltoworld _spawnpos;
@@ -224,12 +200,14 @@ for "_i" from 1 to _num do {
 
   };
 
-  //Choose civ behaviour (normal or hostile) based on probability.
-	if ((random 1) < Hz_ambw_hostileCivRatio) then {
+  //Choose civ behaviour (normal or hostile) based on probability, also factoring side relations	
+	if ((random 1) < ((1 + 4*(1 - (Hz_ambw_srel_relationsCivilian/100)))*Hz_ambw_hostileCivRatio)) then {
 	
     _civtype = selectRandom Hz_ambw_hostileCivTypes;
     _group = selectRandom _civgroups;
     _civ = _group createUnit [ _civtype, _spawnpos, [], 2, "NONE" ];
+		
+		_civ setVariable ["Hz_ambw_civ_isHostile",true,true];
     
     _civarray pushBack _civ;  
     
@@ -243,11 +221,9 @@ for "_i" from 1 to _num do {
     _civ setskill ["spotTime",1];    
 		
     removeAllWeapons _civ;
-    removeAllItems _civ;		
-		_civ unassignItem "ItemMap";
-		_civ removeItem "ItemMap";
-		_civ unassignItem "ItemCompass";
-		_civ removeItem "ItemCompass";
+    removeAllItems _civ;
+		_civ unlinkItem "ItemMap";
+		_civ unlinkItem "ItemCompass";
     
     _civ setposatl _spawnpos;
     
@@ -261,21 +237,30 @@ for "_i" from 1 to _num do {
 			_civ setunitpos "UP";
 			
 			if ((random 1) < 0.5) then {
-				_civ addBackpack "B_OutdoorPack_tan";	
-				_civ addMagazine "IEDUrbanBig_Remote_Mag";			
-				[_civ,[Hz_ambw_armedCivilianTargetSide],"IEDUrbanBig_Remote_Ammo",Hz_ambw_armedCivilianSide] spawn Hz_ambw_civ_suicideBomber;
-			} else {
-				_civ addMagazine "IEDUrbanSmall_Remote_Mag";
-				_civ spawn {
-					sleep 1;
-					if ("IEDUrbanSmall_Remote_Mag" in (magazines _this)) then {
-						[_this,[Hz_ambw_armedCivilianTargetSide],"IEDUrbanSmall_Remote_Mag",Hz_ambw_armedCivilianSide] spawn Hz_ambw_civ_suicideBomber;
-					} else {
-						_this addMagazines ["HandGrenade", 20];
-						[_this,[Hz_ambw_armedCivilianTargetSide],"HandGrenade",Hz_ambw_armedCivilianSide] spawn Hz_ambw_civ_suicideBomber;
+				_civ addBackpack (selectRandom ["B_Carryall_cbr", "B_Carryall_khk", "B_Carryall_oli", "B_FieldPack_blk", "B_FieldPack_cbr", "B_FieldPack_khk", "B_FieldPack_oli", "B_CivilianBackpack_01_Everyday_Astra_F", "B_CivilianBackpack_01_Everyday_Black_F", "B_CivilianBackpack_01_Sport_Blue_F", "B_CivilianBackpack_01_Sport_Green_F", "B_CivilianBackpack_01_Sport_Red_F", "B_Carryall_green_F", "B_FieldPack_green_F", "B_Messenger_Black_F", "B_Messenger_Coyote_F", "B_Messenger_Gray_F", "B_Messenger_Olive_F"]);
+			};
+
+			_civ spawn {
+				sleep 1;
+				if (_this canAdd "IEDUrbanBig_Remote_Mag") then {
+					for "_i" from 1 to (1 max (floor random 4)) do {
+						_this addMagazine "IEDUrbanBig_Remote_Mag";
 					};
-				};				
-			};	
+					[_this,[Hz_ambw_armedCivilianTargetSide],["IEDUrbanBig_Remote_Mag","IEDUrbanBig_Remote_Ammo"],Hz_ambw_armedCivilianSide] call Hz_ambw_civ_suicideBomber;
+				} else {
+					if (_this canAdd "IEDUrbanSmall_Remote_Mag") then {
+						for "_i" from 1 to (1 max (floor random 7)) do {
+							_this addMagazine "IEDUrbanSmall_Remote_Mag";
+						};
+						[_this,[Hz_ambw_armedCivilianTargetSide],["IEDUrbanSmall_Remote_Mag", "IEDUrbanSmall_Remote_Ammo"],Hz_ambw_armedCivilianSide] call Hz_ambw_civ_suicideBomber;
+					} else {
+						for "_i" from 1 to (1 max (floor random 9)) do {
+							_this addMagazine "HandGrenade";
+						};
+						[_this,[Hz_ambw_armedCivilianTargetSide],["HandGrenade", "GrenadeHand"],Hz_ambw_armedCivilianSide] call Hz_ambw_civ_suicideBomber;
+					};
+				};
+			};
 			
 			// get rid of initial "weapon on back" animation at spawn...
 			[_civ, ""] remoteExecCall ["switchMove", 0, false];
@@ -310,14 +295,12 @@ for "_i" from 1 to _num do {
 		
     removeAllWeapons _civ;
     removeAllItems _civ;     
-		_civ unassignItem "ItemMap";
-		_civ removeItem "ItemMap";
-		_civ unassignItem "ItemCompass";
-		_civ removeItem "ItemCompass";		
+		_civ unlinkItem "ItemMap";
+		_civ unlinkItem "ItemCompass";
     
     _civ setposatl _spawnpos;
     
-    if ((random 1) > 0.96) then {_civ addBackpack "B_OutdoorPack_tan";};          
+    if ((random 1) > 0.96) then {_civ addBackpack (selectRandom ["B_Carryall_cbr", "B_Carryall_khk", "B_Carryall_oli", "B_FieldPack_blk", "B_FieldPack_cbr", "B_FieldPack_khk", "B_FieldPack_oli", "B_CivilianBackpack_01_Everyday_Astra_F", "B_CivilianBackpack_01_Everyday_Black_F", "B_CivilianBackpack_01_Sport_Blue_F", "B_CivilianBackpack_01_Sport_Green_F", "B_CivilianBackpack_01_Sport_Red_F", "B_Carryall_green_F", "B_FieldPack_green_F", "B_Messenger_Black_F", "B_Messenger_Coyote_F", "B_Messenger_Gray_F", "B_Messenger_Olive_F"]);};          
     (group _civ) setBehaviour "SAFE";      
     
     if(Hz_ambw_enableClientProcessing) then {_client = selectRandom _ownerIDs; _civ setowner _client;};
