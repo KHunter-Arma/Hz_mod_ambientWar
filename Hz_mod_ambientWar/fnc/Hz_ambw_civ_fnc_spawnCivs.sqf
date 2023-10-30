@@ -64,7 +64,7 @@ if(Hz_ambw_enableClientProcessing) then {
 };
 
 //Determine number of civs to spawn for this location
-_buildings = (nearestObjects [_pos, ["House"], _radius]) select {(getDammage _x) < 0.75};
+_buildings = (nearestObjects [_pos, ["House"], _radius]) select {((getDammage _x) < 0.75) && {!(isObjectHidden _x)}};
 _count = count _buildings;
 _num = 0;
 if (_numinput > 0) then {

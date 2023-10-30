@@ -119,6 +119,23 @@ _sector set [7,_groupsCapturing];
 Hz_ambw_sc_sectors set [_sectorIndex, _sector];
 publicVariable "Hz_ambw_sc_sectors";
 
+// check for any helping player factions
+	private _nearFriendlyPlayers = (_sectorPos nearEntities [["CAManBase", "LandVehicle", "Ship", "StaticWeapon"], _radius*1.2]) select {
+		private _unit = effectiveCommander _x;	
+		(isPlayer _unit)
+		&& {[side _unit, _side] call Hz_ambw_fnc_areFriends}
+		&& {!(_unit getVariable ["ACE_isUnconscious",false])}
+		&& {(lifeState _unit) != "INCAPACITATED"}
+	};
+	_nearFriendlyPlayers = _nearFriendlyPlayers apply {effectiveCommander _x};
+	{
+		private _sideFaction = _x call Hz_ambw_srel_fnc_getUnitSideFaction;
+		private _playerFaction = _sideFaction select 1;
+		if (_playerFaction != "") then {
+			_friendlyPlayerFactionsHelpingNeutralise pushBackUnique _playerFaction;
+		};
+	} foreach _nearFriendlyPlayers;
+
 //wait until we are stronger than the enemy within the radius
 private _nearEntities = [];
 private _strengthRatio = 0;
@@ -292,23 +309,6 @@ if (!isnull _flag) then {
 	_sector set [3, sideEmpty];
 	Hz_ambw_sc_sectors set [_sectorIndex, _sector];
 	publicVariable "Hz_ambw_sc_sectors";
-	
-	// check for any helping player factions
-	private _nearFriendlyPlayers = (_sectorPos nearEntities [["CAManBase", "LandVehicle", "Ship", "StaticWeapon"], _radius*1.2]) select {
-		private _unit = effectiveCommander _x;	
-		(isPlayer _unit)
-		&& {[side _unit, _side] call Hz_ambw_fnc_areFriends}
-		&& {!(_unit getVariable ["ACE_isUnconscious",false])}
-		&& {(lifeState _unit) != "INCAPACITATED"}
-	};
-	_nearFriendlyPlayers = _nearFriendlyPlayers apply {effectiveCommander _x};
-	{
-		private _sideFaction = _x call Hz_ambw_srel_fnc_getUnitSideFaction;
-		private _playerFaction = _sideFaction select 1;
-		if (_playerFaction != "") then {
-			_friendlyPlayerFactionsHelpingNeutralise pushBackUnique _playerFaction;
-		};
-	} foreach _nearFriendlyPlayers;
 	
 	_tEnd = time + Hz_ambw_sc_captureTime/4;
 	_exit = call _sleep;
