@@ -120,7 +120,7 @@ Hz_ambw_sc_sectors set [_sectorIndex, _sector];
 publicVariable "Hz_ambw_sc_sectors";
 
 // check for any helping player factions
-	private _nearFriendlyPlayers = (_sectorPos nearEntities [["CAManBase", "LandVehicle", "Ship", "StaticWeapon"], _radius*1.2]) select {
+	private _nearFriendlyPlayers = (_sectorPos nearEntities [["CAManBase", "LandVehicle", "Ship", "StaticWeapon"], (_radius*1.2) max 200]) select {
 		private _unit = effectiveCommander _x;	
 		(isPlayer _unit)
 		&& {[side _unit, _side] call Hz_ambw_fnc_areFriends}
@@ -333,7 +333,7 @@ Hz_ambw_sc_sectors set [_sectorIndex, _sector];
 publicVariable "Hz_ambw_sc_sectors";
 
 // check if helping player factions are still there
-private _nearFriendlyPlayers = (_sectorPos nearEntities [["CAManBase", "LandVehicle", "Ship", "StaticWeapon"], _radius]) select {
+private _nearFriendlyPlayers = (_sectorPos nearEntities [["CAManBase", "LandVehicle", "Ship", "StaticWeapon"], _radius max 150]) select {
 	private _unit = effectiveCommander _x;	
 	(isPlayer _unit)
 	&& {[side _unit, _side] call Hz_ambw_fnc_areFriends}
