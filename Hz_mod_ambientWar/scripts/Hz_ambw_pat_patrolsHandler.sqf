@@ -122,29 +122,30 @@ while {true} do {
 				_patrolArray = Hz_ambw_pat_patrolsArray;
 			};
 		};
-					
-		{						
-			_randomIndex = floor random (count _patrolArray);
-			
-			_randomPatrol = _patrolArray select _randomIndex; 
-			
-			_mpos = [];
-			
-			if ((typeName (_randomPatrol select 2)) == "STRING") then {
-				_mpos = markerpos (_randomPatrol select 2);
-			} else {
-				_mpos = markerpos (selectRandom (_randomPatrol select 2));
-			};
-			
-			if (({(_mpos distance _x) < 3500} count playableunits) < 1) exitWith {
-				
-				_randomPatrol spawn Hz_ambw_pat_spawnPatrol;
-				_randomIndex = Hz_ambw_pat_patrolsArray find _randomPatrol;
-				Hz_ambw_pat_patrolsArray set [_randomIndex,"nil"];
-				Hz_ambw_pat_patrolsArray = Hz_ambw_pat_patrolsArray - ["nil"];		
-			};		
-		} foreach _patrolArray;
 		
+		_randomIndex = floor random (count _patrolArray);		
+		_randomPatrol = _patrolArray select _randomIndex;		
+		_doSpawn = false;
+		
+		if ((typeName (_randomPatrol select 2)) == "STRING") then {
+			_mpos = markerpos (_randomPatrol select 2);
+			if (({(_mpos distance _x) < 3500} count playableunits) < 1) then {
+				_doSpawn = true;
+			};
+		} else {
+			_suitablemkp = (_randomPatrol select 2) select {_mpos = markerpos _x; ({(_mpos distance _x) < 3500} count playableunits) < 1};
+			if ((count _suitablemkp) > 0) then {
+				_doSpawn = true;
+			};
+		};
+		
+		if (_doSpawn) then {
+			_randomPatrol spawn Hz_ambw_pat_spawnPatrol;
+			_randomIndex = Hz_ambw_pat_patrolsArray find _randomPatrol;
+			Hz_ambw_pat_patrolsArray set [_randomIndex,"nil"];
+			Hz_ambw_pat_patrolsArray = Hz_ambw_pat_patrolsArray - ["nil"];
+		};
+			
 	};
 	
 	{
