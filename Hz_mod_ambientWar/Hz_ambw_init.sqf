@@ -1,5 +1,5 @@
 /*******************************************************************************
-* Copyright (C) 2018-2020 K.Hunter
+* Copyright (C) 2018-2024 K.Hunter
 *
 * This file is licensed under a Creative Commons
 * Attribution-NonCommercial-ShareAlike 4.0 International License.
@@ -29,9 +29,6 @@ _this spawn {
 	Hz_ambw_fnc_isHeadlessClient = compile preprocessFileLineNumbers (Hz_ambw_functionsPath + "Hz_ambw_fnc_isHeadlessClient.sqf");
 	Hz_ambw_fnc_isUncon = compile preprocessFileLineNumbers (Hz_ambw_functionsPath + "Hz_ambw_fnc_isUncon.sqf");
 
-	_this call compile preprocessFileLineNumbers (Hz_ambw_path + "Hz_ambw_srel_init.sqf");
-	_this call compile preprocessFileLineNumbers (Hz_ambw_path + "Hz_ambw_civ_init.sqf");
-	
 	Hz_ambw_enablePersistency = false;
 	if (isClass (configFile >> "cfgPatches" >> "Hz_mod_persistency")) then {
 		sleep 5;
@@ -40,6 +37,8 @@ _this spawn {
 		};
 	};
 	
+	_this call compile preprocessFileLineNumbers (Hz_ambw_path + "Hz_ambw_srel_init.sqf");
+	_this call compile preprocessFileLineNumbers (Hz_ambw_path + "Hz_ambw_civ_init.sqf");
 	_this call compile preprocessFileLineNumbers (Hz_ambw_path + "Hz_ambw_sc_init.sqf");
 	_this call compile preprocessFileLineNumbers (Hz_ambw_path + "Hz_ambw_pat_init.sqf");
 

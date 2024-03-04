@@ -161,7 +161,7 @@ if (_useRealisticSectorBuildUp) then {
 
 		// create reinforcements and wait for their arrival (or untimely demise...)
 		
-		private _spawnPos = [_sectorPos, 1800, 2200, _side] call Hz_ambw_fnc_findSpawnPos;
+		private _spawnPos = [_sectorPos, 2500, 3000, _side] call Hz_ambw_fnc_findSpawnPos;
 		
 		_defGroup = createGroup _side;
 		_defGroup deleteGroupWhenEmpty true;

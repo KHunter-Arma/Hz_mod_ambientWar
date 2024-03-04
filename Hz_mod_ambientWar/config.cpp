@@ -1,5 +1,5 @@
 /*******************************************************************************
-* Copyright (C) 2018 K.Hunter
+* Copyright (C) 2018-2024 K.Hunter
 *
 * This file is licensed under a Creative Commons
 * Attribution-NonCommercial-ShareAlike 4.0 International License.
@@ -99,6 +99,7 @@ class CfgVehicles
       class Checkbox; // Default checkbox (returned value is Bool)
       class CheckboxNumber; // Default checkbox (returned value is Number)
       class ModuleDescription; // Module description
+      class Title; // Module description
     };
     // Description base classes, for more information see below
     class ModuleDescription
@@ -133,70 +134,10 @@ class CfgVehicles
     // Module attributes, uses https://community.bistudio.com/wiki/Eden_Editor:_Configuring_Attributes#Entity_Specific
     class Attributes: AttributesBase
     { 
-			
-			class Factions: Edit
-			{
-				property="Hz_ambw_module_pFactions";
-				displayName="Factions Array";
-				tooltip="";
-				defaultValue="""[['B.A.D. PMC',west,5,['C_MAN_POLO_1_F','CUP_I_PMC_ION','C_MAN_HUNTER_1_F']],['Iraqi Army',west,1,['LOP_IA']],['US Forces',west,10,['USAF','USAF_AFSOC','USAF_SFS_PILOTS','RHS_FACTION_SOCOM','RHS_FACTION_USAF','RHS_FACTION_USARMY','RHS_FACTION_USARMY_D','RHS_FACTION_USARMY_WD','RHS_FACTION_USMC','RHS_FACTION_USMC_D','RHS_FACTION_USMC_WD','RHS_FACTION_USN']],['Friendly Insurgents',west,0.3,[]],['Enemy Insurgents',east,0,['CUP_O_TK_MILITIA','CUP_I_TK_GUE']],['Takistani Army',east,0,['LOP_TKA','CUP_O_TK']],['Civilians',civilian,1,['LOP_TAK_CIV','CUP_C_TK','CIV_F','CIV_IDAP_F']]]""";
-			};
-			
-			class PenaltyPerKill: Edit
-			{
-				property="Hz_ambw_module_pPenaltyPerKill";
-				displayName="Penalty Per Kill";
-				tooltip="";
-				defaultValue="""5""";
-			};
-			
-			class PenaltyPerStolenItem: Edit
-			{
-				property="Hz_ambw_module_pPenaltyPerStolenItem";
-				displayName="Penalty Per Stolen Item";
-				tooltip="";
-				defaultValue="""1""";
-			};
-			
-			class PenaltyPerStolenWeapon: Edit
-			{
-				property="Hz_ambw_module_pPenaltyPerStolenWeapon";
-				displayName="Penalty Per Stolen Weapon";
-				tooltip="";
-				defaultValue="""2""";
-			};
-			
-			class RelationsOwnSide: Edit
-			{
-				property="Hz_ambw_module_pRelationsOwnSide";
-				displayName="Relations Own Side";
-				tooltip="";
-				defaultValue="""100""";
-			};
-			
-			class RelationsCivilian: Edit
-			{
-				property="Hz_ambw_module_pRelationsCivilian";
-				displayName="Relations Civilian";
-				tooltip="";
-				defaultValue="""100""";
-			};
-			
-			class EnableHzEcon: Checkbox
-			{
-				property="Hz_ambw_module_pEnableHzEcon";
-				displayName="Enable Hz Economy";
-				tooltip="";
-			};
-			
-			class FundsPenaltyPerKill: Edit
-			{
-				property="Hz_ambw_module_pFundsPenaltyPerKill";
-				displayName="Funds Penalty Per Kill";
-				tooltip="";
-				defaultValue="""100000""";
-			};
-			
+			///////////////////////////////////////////////////////////
+			class TitleCiv : Title {
+				displayName="Ambient Civilians Settings:";
+			};			
 			class MaxCivCount: Edit
 			{
 				property="Hz_ambw_module_pMaxCivCount";
@@ -268,6 +209,249 @@ class CfgVehicles
 				tooltip="";
 				defaultValue="""[[0.45, 'CUP_hgun_Makarov', 'CUP_8Rnd_9x18_Makarov_M', 8],[1, 'CUP_hgun_TaurusTracker455', 'CUP_6Rnd_45ACP_M', 8]]""";
 			};
+			///////////////////////////////////////////////////////////
+			class TitleSrel : Title {
+				displayName="Side Relations Settings:";
+			};
+			class Factions: Edit
+			{
+				property="Hz_ambw_module_pFactions";
+				displayName="Factions Array";
+				tooltip="";
+				defaultValue="""[['B.A.D. PMC',west,5,['C_MAN_POLO_1_F','CUP_I_PMC_ION','C_MAN_HUNTER_1_F']],['Iraqi Army',west,1,['LOP_IA']],['US Forces',west,10,['USAF','USAF_AFSOC','USAF_SFS_PILOTS','RHS_FACTION_SOCOM','RHS_FACTION_USAF','RHS_FACTION_USARMY','RHS_FACTION_USARMY_D','RHS_FACTION_USARMY_WD','RHS_FACTION_USMC','RHS_FACTION_USMC_D','RHS_FACTION_USMC_WD','RHS_FACTION_USN']],['Friendly Insurgents',west,0.3,[]],['Enemy Insurgents',east,0,['CUP_O_TK_MILITIA','CUP_I_TK_GUE']],['Takistani Army',east,0,['LOP_TKA','CUP_O_TK']],['Civilians',civilian,1,['LOP_TAK_CIV','CUP_C_TK','CIV_F','CIV_IDAP_F']]]""";
+			};
+			
+			class PenaltyPerKill: Edit
+			{
+				property="Hz_ambw_module_pPenaltyPerKill";
+				displayName="Penalty Per Kill";
+				tooltip="";
+				defaultValue="""5""";
+			};
+			
+			class PenaltyPerStolenItem: Edit
+			{
+				property="Hz_ambw_module_pPenaltyPerStolenItem";
+				displayName="Penalty Per Stolen Item";
+				tooltip="";
+				defaultValue="""1""";
+			};
+			
+			class PenaltyPerStolenWeapon: Edit
+			{
+				property="Hz_ambw_module_pPenaltyPerStolenWeapon";
+				displayName="Penalty Per Stolen Weapon";
+				tooltip="";
+				defaultValue="""2""";
+			};
+			
+			class RelationsOwnSide: Edit
+			{
+				property="Hz_ambw_module_pRelationsOwnSide";
+				displayName="Relations Own Side";
+				tooltip="";
+				defaultValue="""100""";
+			};
+			
+			class RelationsCivilian: Edit
+			{
+				property="Hz_ambw_module_pRelationsCivilian";
+				displayName="Relations Civilian";
+				tooltip="";
+				defaultValue="""100""";
+			};
+			
+			class EnableHzEcon: Checkbox
+			{
+				property="Hz_ambw_module_pEnableHzEcon";
+				displayName="Enable Hz Economy";
+				tooltip="";
+			};
+			
+			class FundsPenaltyPerKill: Edit
+			{
+				property="Hz_ambw_module_pFundsPenaltyPerKill";
+				displayName="Funds Penalty Per Kill";
+				tooltip="";
+				defaultValue="""100000""";
+			};
+			
+			class PositiveRelationsCivilianBleedAmount: Edit
+			{
+				property="Hz_ambw_module_pPositiveRelationsCivilianBleedAmount";
+				displayName="Civ relations bleed amount";
+				tooltip="Set this to a value greater than 0 if you want positive relations with civilians to gradually normalise back down to neutral over time. The value determines how much in percentage will drop with every mission restart, and has no real meaning if persistency is not used. Relations do not bleed if already negative.";
+				defaultValue="""0""";
+			};
+			
+			class PositiveRelationsOwnSideBleedAmount: Edit
+			{
+				property="Hz_ambw_module_pPositiveRelationsOwnSideBleedAmount";
+				displayName="Own side relations bleed amount";
+				tooltip="Set this to a value greater than 0 if you want positive relations with your own side to gradually normalise back down to neutral over time. The value determines how much in percentage will drop with every mission restart, and has no real meaning if persistency is not used. Relations do not bleed if already negative.";
+				defaultValue="""0""";
+			};
+			
+			class PositiveRelationsBleedOnlyWhenServerPopulated: Checkbox
+			{
+				property="Hz_ambw_module_pPositiveRelationsBleedOnlyWhenServerPopulated";
+				displayName="Bleed relations only when populated";
+				tooltip="Check to allow positive relations to bleed only when at least one player joins the server and stays for at least 1 minute.";
+			};
+			///////////////////////////////////////////////////////////
+			class TitlePat : Title {
+				displayName="Ambient Patrols Settings:";
+			};
+			class LockPatrolVehicles: Checkbox
+			{
+				property="Hz_ambw_module_pLockPatrolVehicles";
+				displayName="Lock patrol vehicles";
+				tooltip="";
+			};
+			class MaxNumOfUnitsAllowedBeforeSpawningNewPatrol: Edit
+			{
+				property="Hz_ambw_module_pMaxNumOfUnitsAllowedBeforeSpawningNewPatrol";
+				displayName="Max all units when spawning new patrol";
+				tooltip="Maximum number of all units (including players) allowed on the map when trying to spawn a new patrol.";
+				defaultValue="""160""";
+			};
+			class PatrolFactionsBalanceRatio: Edit
+			{
+				property="Hz_ambw_module_pPatrolFactionsBalanceRatio";
+				displayName="Patrol factions balance ratio";
+				tooltip="";
+				defaultValue="""0.65""";
+			};
+			class CleanupLeftoverPatrolVehiclesTime: Edit
+			{
+				property="Hz_ambw_module_pCleanupLeftoverPatrolVehiclesTime";
+				displayName="Time to cleanup leftover patrol vehicles";
+				tooltip="";
+				defaultValue="""10800""";
+			};
+			class PatrolVehicleCleanupMinimumPlayerDistance: Edit
+			{
+				property="Hz_ambw_module_pPatrolVehicleCleanupMinimumPlayerDistance";
+				displayName="Min player distance allowed to cleanup leftover vehicles";
+				tooltip="";
+				defaultValue="""2000""";
+			};
+			class PatrolsMasterHCName: Edit
+			{
+				property="Hz_ambw_module_pPatrolsMasterHCName";
+				displayName="Name of patrols master HC";
+				tooltip="";
+				defaultValue="""HC""";
+			};
+			//////////////////////////////////////////////////////////////////////////
+			class TitleSc : Title {
+				displayName="Sector Control Settings:";
+			};
+			class SectorMarkers: Edit
+			{
+				property="Hz_ambw_module_pSectorMarkers";
+				displayName="Sector markers";
+				tooltip="";
+				defaultValue="""['sector_1','sector_2','sector_3','sector_4','sector_5','sector_6']""";
+			};
+			class SectorMinDefenderCount: Edit
+			{
+				property="Hz_ambw_module_pSectorMinDefenderCount";
+				displayName="Min number of defenders";
+				tooltip="";
+				defaultValue="""12""";
+			};
+			class SectorMaxDefenderCount: Edit
+			{
+				property="Hz_ambw_module_pSectorMaxDefenderCount";
+				displayName="Max number of defenders";
+				tooltip="";
+				defaultValue="""24""";
+			};
+			class SectorMinStaticCount: Edit
+			{
+				property="Hz_ambw_module_pSectorMinStaticCount";
+				displayName="Min number of static weapons";
+				tooltip="";
+				defaultValue="""2""";
+			};
+			class SectorMaxStaticCount: Edit
+			{
+				property="Hz_ambw_module_pSectorMaxStaticCount";
+				displayName="Max number of static weapons";
+				tooltip="";
+				defaultValue="""3""";
+			};
+			class SectorMinEmplacementCount: Edit
+			{
+				property="Hz_ambw_module_pSectorMinEmplacementCount";
+				displayName="Min number of emplacements";
+				tooltip="";
+				defaultValue="""15""";
+			};
+			class SectorMaxEmplacementCount: Edit
+			{
+				property="Hz_ambw_module_pSectorMaxEmplacementCount";
+				displayName="Max number of emplacements";
+				tooltip="";
+				defaultValue="""30""";
+			};
+			class SectorDefenderTypes: Edit
+			{
+				property="Hz_ambw_module_pSectorDefenderTypes";
+				displayName="Defender types list";
+				tooltip="";
+				//[[OPFOR],[BLUFOR],[GRNFOR]]
+				defaultValue="""[['CUP_O_TK_Soldier','CUP_O_TK_Soldier_SL','CUP_O_TK_Soldier_SL','CUP_O_TK_Soldier_AR','Hz_CUP_O_TK_Soldier_GL2','CUP_O_TK_Soldier','CUP_O_TK_Soldier','CUP_O_TK_Soldier_AT','CUP_O_TK_Soldier_AAT','CUP_O_TK_Soldier','CUP_O_TK_Soldier','CUP_O_TK_Soldier_AR','CUP_O_TK_Medic','CUP_O_TK_Soldier_Backpack','Hz_CUP_O_TK_Soldier2','Hz_CUP_O_TK_Soldier2','CUP_O_TK_Soldier_Backpack','CUP_O_TK_Soldier_AMG','CUP_O_TK_Soldier_Backpack','CUP_O_TK_Soldier_Backpack','Hz_CUP_O_TK_Soldier_DMR','CUP_O_TK_Soldier_AAT','CUP_O_TK_Soldier_Backpack','CUP_O_TK_Medic','CUP_O_TK_Soldier_AMG','CUP_O_TK_Soldier_AMG','CUP_O_TK_Soldier_AR','CUP_O_TK_Medic','Hz_CUP_O_TK_Soldier2','CUP_O_TK_Soldier','CUP_O_TK_Soldier_AAT','CUP_O_TK_Soldier_AAT','CUP_O_TK_Soldier','CUP_O_TK_Soldier_GL','CUP_O_TK_Soldier_AT','Hz_CUP_O_TK_Soldier_DMR','CUP_O_TK_Soldier_MG','CUP_O_TK_Soldier','CUP_O_TK_Soldier_AAT','CUP_O_TK_Medic','CUP_O_TK_Soldier','Hz_CUP_O_TK_Soldier2','Hz_CUP_O_TK_Soldier_GL2','CUP_O_TK_Soldier_GL','Hz_CUP_O_TK_Soldier2','CUP_O_TK_Soldier_AR','CUP_O_TK_Soldier','CUP_O_TK_Soldier','CUP_O_TK_Soldier','CUP_O_TK_Soldier','CUP_O_TK_Soldier_AMG','CUP_O_TK_Soldier_AMG','Hz_CUP_O_TK_Soldier2','Hz_CUP_O_TK_Soldier2','Hz_CUP_O_TK_Soldier_GL2','CUP_O_TK_Soldier_AMG','CUP_O_TK_Soldier_MG','CUP_O_TK_Soldier_AAT','CUP_O_TK_Soldier','CUP_O_TK_Soldier','CUP_O_TK_Soldier_AMG','CUP_O_TK_Soldier','CUP_O_TK_Soldier','CUP_O_TK_Soldier','CUP_O_TK_Soldier_Backpack','CUP_O_TK_Soldier_AAT','CUP_O_TK_Soldier_AMG','CUP_O_TK_Soldier','CUP_O_TK_Soldier','CUP_O_TK_Soldier','CUP_O_TK_Medic','CUP_O_TK_Soldier_AAT','Hz_CUP_O_TK_Soldier2','CUP_O_TK_Soldier_MG','CUP_O_TK_Soldier_AAT','CUP_O_TK_Soldier_Backpack','CUP_O_TK_Soldier_LAT','CUP_O_TK_Soldier','Hz_CUP_O_TK_Soldier2','CUP_O_TK_Soldier','CUP_O_TK_Soldier_Backpack','CUP_O_TK_Soldier','CUP_O_TK_Soldier_LAT','CUP_O_TK_Soldier_LAT','Hz_CUP_O_TK_Soldier2','CUP_O_TK_Soldier_AMG','CUP_O_TK_Soldier','CUP_O_TK_Soldier','CUP_O_TK_Medic','Hz_CUP_O_TK_Soldier2','CUP_O_TK_Soldier_Backpack','CUP_O_TK_Soldier_LAT','CUP_O_TK_Soldier_AAT','CUP_O_TK_Soldier_LAT','CUP_O_TK_Soldier_AMG','CUP_O_TK_Soldier','CUP_O_TK_Soldier_AAT','CUP_O_TK_Soldier','CUP_O_TK_Soldier','CUP_O_TK_Soldier_AAT','CUP_O_TK_Soldier_AAT','CUP_O_TK_Soldier','CUP_O_TK_Soldier','CUP_O_TK_Soldier_AMG','CUP_O_TK_Soldier','CUP_O_TK_Soldier_Backpack','CUP_O_TK_Soldier_MG','CUP_O_TK_Soldier','CUP_O_TK_Soldier','Hz_CUP_O_TK_Soldier_DMR','CUP_O_TK_Soldier_Backpack','CUP_O_TK_Soldier_Backpack','CUP_O_TK_Medic','CUP_O_TK_Medic','CUP_O_TK_Soldier_Backpack','CUP_O_TK_Soldier_AT','Hz_CUP_O_TK_Soldier_GL2','CUP_O_TK_Soldier_AMG','Hz_CUP_O_TK_Soldier_GL2','Hz_CUP_O_TK_Soldier2','Hz_CUP_O_TK_Soldier2','CUP_O_TK_Soldier_AAT','CUP_O_TK_Soldier_AAT','CUP_O_TK_Soldier','CUP_O_TK_Soldier_LAT','CUP_O_TK_Soldier_Backpack','CUP_O_TK_Soldier_AR','Hz_CUP_O_TK_Soldier2','CUP_O_TK_Soldier_AMG','Hz_CUP_O_TK_Soldier2','CUP_O_TK_Soldier','CUP_O_TK_Soldier_AMG','CUP_O_TK_Soldier','Hz_CUP_O_TK_Soldier2','CUP_O_TK_Soldier_AMG','CUP_O_TK_Soldier_Backpack','CUP_O_TK_Soldier_AMG','CUP_O_TK_Soldier','Hz_CUP_O_TK_Soldier2','CUP_O_TK_Soldier_AR','CUP_O_TK_Soldier_AT','CUP_O_TK_Medic','CUP_O_TK_Soldier_AR','CUP_O_TK_Soldier_LAT','CUP_O_TK_Soldier','CUP_O_TK_Soldier','CUP_O_TK_Soldier','CUP_O_TK_Soldier_SL','CUP_O_TK_Soldier_Backpack','CUP_O_TK_Soldier_AAT','CUP_O_TK_Soldier','CUP_O_TK_Soldier_SL','CUP_O_TK_Soldier_Backpack','CUP_O_TK_Soldier_LAT','CUP_O_TK_Soldier_AMG','CUP_O_TK_Soldier_AAT','CUP_O_TK_Soldier_AR','CUP_O_TK_Soldier_GL','CUP_O_TK_Soldier_Backpack','CUP_O_TK_Soldier_AAT','CUP_O_TK_Soldier_MG','CUP_O_TK_Soldier_Backpack','CUP_O_TK_Soldier_AR','CUP_O_TK_Soldier','CUP_O_TK_Soldier_AAT','Hz_CUP_O_TK_Soldier_GL2','CUP_O_TK_Soldier_GL','CUP_O_TK_Soldier_AMG','CUP_O_TK_Soldier_AMG','CUP_O_TK_Soldier_AAT','CUP_O_TK_Soldier','CUP_O_TK_Medic','Hz_CUP_O_TK_Soldier_DMR','Hz_CUP_O_TK_Soldier_DMR','CUP_O_TK_Soldier_AR','CUP_O_TK_Soldier_AMG','CUP_O_TK_Soldier_AR','CUP_O_TK_Soldier_LAT','CUP_O_TK_Soldier','CUP_O_TK_Soldier','Hz_CUP_O_TK_Soldier2','CUP_O_TK_Soldier_Backpack','CUP_O_TK_Soldier_GL','CUP_O_TK_Soldier_AR','Hz_CUP_O_TK_Soldier2','CUP_O_TK_Medic','CUP_O_TK_Soldier_Backpack','CUP_O_TK_Soldier_Backpack','CUP_O_TK_Soldier_AT','CUP_O_TK_Soldier_AAT','Hz_CUP_O_TK_Soldier_DMR','CUP_O_TK_Soldier_AAT','CUP_O_TK_Soldier','CUP_O_TK_Soldier_AAT','Hz_CUP_O_TK_Soldier2','CUP_O_TK_Medic','CUP_O_TK_Soldier_AMG','CUP_O_TK_Soldier_AMG','CUP_O_TK_Soldier_Backpack','CUP_O_TK_Soldier_LAT','CUP_O_TK_Soldier_AMG','Hz_CUP_O_TK_Soldier2','CUP_O_TK_Soldier','CUP_O_TK_Soldier_Backpack','CUP_O_TK_Soldier_AMG','Hz_CUP_O_TK_Soldier2','CUP_O_TK_Soldier','CUP_O_TK_Soldier_AMG','CUP_O_TK_Soldier_AAT','Hz_CUP_O_TK_Soldier2','CUP_O_TK_Soldier_Backpack','Hz_CUP_O_TK_Soldier2','CUP_O_TK_Soldier','Hz_CUP_O_TK_Soldier2','CUP_O_TK_Soldier_LAT','CUP_O_TK_Soldier_AAT','CUP_O_TK_Soldier_GL','CUP_O_TK_Soldier_LAT','CUP_O_TK_Soldier_MG','CUP_O_TK_Soldier_SL'],['LOP_IA_Infantry_Rifleman_2','LOP_IA_Infantry_Rifleman_3','LOP_IA_Infantry_Rifleman_3','LOP_IA_Infantry_Rifleman_3','LOP_IA_Infantry_MG_Asst','LOP_IA_Infantry_AT_Asst','LOP_IA_Infantry_MG_Asst','LOP_IA_Infantry_Marksman','LOP_IA_Infantry_AR_Asst_Hz','LOP_IA_Infantry_AR_Asst_Hz','LOP_IA_Infantry_AT_Asst','LOP_IA_Infantry_Rifleman_3','LOP_IA_Infantry_MG_Asst','LOP_IA_Infantry_Rifleman','LOP_IA_Infantry_Corpsman','LOP_IA_Infantry_Marksman','LOP_IA_Infantry_AR_Asst_Hz','LOP_IA_Infantry_Rifleman_4','LOP_IA_Infantry_GL','LOP_IA_Infantry_Rifleman','LOP_IA_Infantry_Rifleman_4','LOP_IA_Infantry_Rifleman_2','LOP_IA_Infantry_Rifleman_3','LOP_IA_Infantry_MG_Asst','LOP_IA_Infantry_Rifleman','LOP_IA_Infantry_Rifleman','LOP_IA_Infantry_Rifleman_M16A2_Hz','LOP_IA_Infantry_AR_Hz','LOP_IA_Infantry_SL','LOP_IA_Infantry_Rifleman_4','LOP_IA_Infantry_MG_Asst','LOP_IA_Infantry_AT','LOP_IA_Infantry_Rifleman_2','LOP_IA_Infantry_AT','LOP_IA_Infantry_Rifleman_2','LOP_IA_Infantry_MG_Asst','LOP_IA_Infantry_Rifleman_3','LOP_IA_Infantry_Rifleman','LOP_IA_Infantry_MG_Asst','LOP_IA_Infantry_MG','LOP_IA_Infantry_AT_Asst','LOP_IA_Infantry_Rifleman_4','LOP_IA_Infantry_Rifleman_3','LOP_IA_Infantry_AR_Asst_Hz','LOP_IA_Infantry_MG_Asst','LOP_IA_Infantry_SL','LOP_IA_Infantry_MG_Asst','LOP_IA_Infantry_Rifleman_3','LOP_IA_Infantry_AT_Asst','LOP_IA_Infantry_Rifleman_4','LOP_IA_Infantry_Rifleman_2','LOP_IA_Infantry_Rifleman_3','LOP_IA_Infantry_Rifleman_3','LOP_IA_Infantry_AR_Asst_Hz','LOP_IA_Infantry_AR_Asst_Hz','LOP_IA_Infantry_AT_Asst','LOP_IA_Infantry_Rifleman_4','LOP_IA_Infantry_Rifleman','LOP_IA_Infantry_AR_Asst_Hz','LOP_IA_Infantry_AT_Asst','LOP_IA_Infantry_Corpsman','LOP_IA_Infantry_MG','LOP_IA_Infantry_MG_Asst','LOP_IA_Infantry_SL','LOP_IA_Infantry_MG_Asst','LOP_IA_Infantry_AR_Asst_Hz','LOP_IA_Infantry_Rifleman_4','LOP_IA_Infantry_Rifleman_4','LOP_IA_Infantry_AR_Asst_Hz','LOP_IA_Infantry_Rifleman_3','LOP_IA_Infantry_AR_Asst_Hz','LOP_IA_Infantry_Rifleman','LOP_IA_Infantry_Rifleman_3','LOP_IA_Infantry_Rifleman','LOP_IA_Infantry_Rifleman','LOP_IA_Infantry_Rifleman_4','LOP_IA_Infantry_AT_Asst','LOP_IA_Infantry_MG_Asst','LOP_IA_Infantry_Rifleman_3','LOP_IA_Infantry_Rifleman','LOP_IA_Infantry_Rifleman','LOP_IA_Infantry_AR_Asst_Hz','LOP_IA_Infantry_AT_Asst','LOP_IA_Infantry_MG_Asst','LOP_IA_Infantry_Rifleman_3','LOP_IA_Infantry_Rifleman_4','LOP_IA_Infantry_Rifleman_4','LOP_IA_Infantry_Rifleman','LOP_IA_Infantry_Rifleman_4','LOP_IA_Infantry_AR_Hz','LOP_IA_Infantry_Rifleman_3','LOP_IA_Infantry_Rifleman_3','LOP_IA_Infantry_AR_Hz','LOP_IA_Infantry_AT_Asst','LOP_IA_Infantry_AT','LOP_IA_Infantry_Rifleman','LOP_IA_Infantry_Corpsman','LOP_IA_Infantry_GL','LOP_IA_Infantry_Rifleman_2','LOP_IA_Infantry_Rifleman_4','LOP_IA_Infantry_Rifleman_4','LOP_IA_Infantry_Rifleman_4','LOP_IA_Infantry_Rifleman_4','LOP_IA_Infantry_Rifleman_4','LOP_IA_Infantry_Rifleman_4','LOP_IA_Infantry_MG_Asst','LOP_IA_Infantry_MG_Asst','LOP_IA_Infantry_SL','LOP_IA_Infantry_AT_Asst','LOP_IA_Infantry_AR_Asst_Hz','LOP_IA_Infantry_Rifleman_4','LOP_IA_Infantry_MG_Asst','LOP_IA_Infantry_AT_Asst','LOP_IA_Infantry_Rifleman_3','LOP_IA_Infantry_AT_Asst','LOP_IA_Infantry_Rifleman_4','LOP_IA_Infantry_GL','LOP_IA_Infantry_AR_Asst_Hz','LOP_IA_Infantry_AR_Asst_Hz','LOP_IA_Infantry_AR_Hz','LOP_IA_Infantry_Rifleman_4','LOP_IA_Infantry_MG','LOP_IA_Infantry_Rifleman_4','LOP_IA_Infantry_Corpsman','LOP_IA_Infantry_MG_Asst','LOP_IA_Infantry_MG_Asst','LOP_IA_Infantry_Rifleman_3','LOP_IA_Infantry_Rifleman','LOP_IA_Infantry_Rifleman','LOP_IA_Infantry_Rifleman_4','LOP_IA_Infantry_MG_Asst','LOP_IA_Infantry_MG_Asst','LOP_IA_Infantry_Rifleman_4','LOP_IA_Infantry_AR_Asst_Hz','LOP_IA_Infantry_AR_Asst_Hz','LOP_IA_Infantry_AR_Asst_Hz','LOP_IA_Infantry_Rifleman_4','LOP_IA_Infantry_AT_Asst','LOP_IA_Infantry_AR_Hz','LOP_IA_Infantry_Rifleman_4','LOP_IA_Infantry_Rifleman_3','LOP_IA_Infantry_Rifleman','LOP_IA_Infantry_Rifleman_2','LOP_IA_Infantry_AT_Asst','LOP_IA_Infantry_AR_Asst_Hz','LOP_IA_Infantry_Rifleman_4','LOP_IA_Infantry_Corpsman','LOP_IA_Infantry_Corpsman','LOP_IA_Infantry_Rifleman','LOP_IA_Infantry_Rifleman_2','LOP_IA_Infantry_Rifleman_4','LOP_IA_Infantry_Rifleman_3','LOP_IA_Infantry_Rifleman_3','LOP_IA_Infantry_AR_Hz','LOP_IA_Infantry_AR_Asst_Hz','LOP_IA_Infantry_AT','LOP_IA_Infantry_AR_Asst_Hz','LOP_IA_Infantry_MG_Asst','LOP_IA_Infantry_Rifleman_4','LOP_IA_Infantry_AT_Asst','LOP_IA_Infantry_Rifleman_4','LOP_IA_Infantry_GL','LOP_IA_Infantry_Rifleman_3','LOP_IA_Infantry_Rifleman_4','LOP_IA_Infantry_Marksman','LOP_IA_Infantry_Rifleman_4','LOP_IA_Infantry_Marksman','LOP_IA_Infantry_AT','LOP_IA_Infantry_Rifleman_4','LOP_IA_Infantry_AR_Hz','LOP_IA_Infantry_Rifleman','LOP_IA_Infantry_Rifleman_4','LOP_IA_Infantry_MG','LOP_IA_Infantry_Rifleman','LOP_IA_Infantry_AT_Asst','LOP_IA_Infantry_Rifleman_2','LOP_IA_Infantry_GL','LOP_IA_Infantry_Rifleman_M16A2_Hz','LOP_IA_Infantry_Corpsman','LOP_IA_Infantry_AR_Hz','LOP_IA_Infantry_MG_Asst','LOP_IA_Infantry_AT_Asst','LOP_IA_Infantry_AT_Asst','LOP_IA_Infantry_Rifleman_4','LOP_IA_Infantry_AT_Asst','LOP_IA_Infantry_Rifleman_2','LOP_IA_Infantry_Rifleman','LOP_IA_Infantry_AT_Asst','LOP_IA_Infantry_Rifleman_4','LOP_IA_Infantry_AR_Hz','LOP_IA_Infantry_AT_Asst','LOP_IA_Infantry_AR_Hz','LOP_IA_Infantry_MG','LOP_IA_Infantry_Corpsman','LOP_IA_Infantry_AT_Asst','LOP_IA_Infantry_Corpsman','LOP_IA_Infantry_Rifleman','LOP_IA_Infantry_Rifleman_4','LOP_IA_Infantry_Rifleman_4','LOP_IA_Infantry_Rifleman_M16A2_Hz','LOP_IA_Infantry_Rifleman_4','LOP_IA_Infantry_Rifleman','LOP_IA_Infantry_AR_Asst_Hz','LOP_IA_Infantry_Rifleman_3','LOP_IA_Infantry_Rifleman_4','LOP_IA_Infantry_Rifleman_4','LOP_IA_Infantry_AR_Hz','LOP_IA_Infantry_Rifleman_4','LOP_IA_Infantry_AR_Hz','LOP_IA_Infantry_MG_Asst','LOP_IA_Infantry_Rifleman_4','LOP_IA_Infantry_Corpsman','LOP_IA_Infantry_AT_Asst','LOP_IA_Infantry_Rifleman_4','LOP_IA_Infantry_Marksman','LOP_IA_Infantry_Rifleman_2','LOP_IA_Infantry_AT_Asst','LOP_IA_Infantry_Rifleman_4','LOP_IA_Infantry_Marksman','LOP_IA_Infantry_SL','LOP_IA_Infantry_Rifleman_4','LOP_IA_Infantry_AT_Asst','LOP_IA_Infantry_Rifleman','LOP_IA_Infantry_Rifleman','LOP_IA_Infantry_GL','LOP_IA_Infantry_Rifleman_3','LOP_IA_Infantry_MG','LOP_IA_Infantry_Rifleman_2','LOP_IA_Infantry_Rifleman_4','LOP_IA_Infantry_AR_Asst_Hz','LOP_IA_Infantry_AR_Asst_Hz','LOP_IA_Infantry_Corpsman','LOP_IA_Infantry_Rifleman_4','LOP_IA_Infantry_Rifleman_3','LOP_IA_Infantry_Rifleman','LOP_IA_Infantry_Corpsman','LOP_IA_Infantry_MG_Asst','LOP_IA_Infantry_AR_Asst_Hz','LOP_IA_Infantry_AR_Asst_Hz','LOP_IA_Infantry_MG_Asst','LOP_IA_Infantry_Rifleman_4','LOP_IA_Infantry_Rifleman_4'],[]]""";
+			};
+			class SectorStaticTypes: Edit
+			{
+				property="Hz_ambw_module_pSectorStaticTypes";
+				displayName="Static weapon types list";
+				tooltip="";
+				//[[OPFOR],[BLUFOR],[GRNFOR]]
+				defaultValue="""[['rhsgref_ins_DSHKM','rhsgref_ins_DSHKM','rhsgref_ins_DSHKM','rhsgref_ins_ZU23','rhsgref_ins_SPG9'],['LOP_IA_Static_M2','LOP_IA_Static_M2','LOP_IA_Static_DSHKM','LOP_IA_Static_SPG9'],[]]""";
+			};
+			class SectorFortificationTypes: Edit
+			{
+				property="Hz_ambw_module_pSectorFortificationTypes";
+				displayName="Emplacement types list";
+				tooltip="";
+				//[[OPFOR],[BLUFOR],[GRNFOR]]
+				defaultValue="""[['Land_BagBunker_Small_F','Land_BagBunker_Small_F','Land_BagBunker_Small_F','Land_BagBunker_Large_F','Land_BagFence_Round_F','Land_BagFence_Round_F','Land_BagFence_Round_F','Land_BagFence_Round_F','Land_BagFence_Round_F','Land_BagFence_Round_F','Land_BagFence_Long_F','Land_BagFence_Long_F','Land_SandbagBarricade_01_half_F','Land_SandbagBarricade_01_half_F','Land_SandbagBarricade_01_half_F','Land_Razorwire_F','Land_Razorwire_F','Land_Razorwire_F','Land_Razorwire_F','Land_CzechHedgehog_01_new_F','Land_CzechHedgehog_01_new_F','Land_CzechHedgehog_01_new_F'],['Land_BagBunker_Small_F','Land_BagBunker_Small_F','Land_BagBunker_Small_F','Land_BagBunker_Large_F','Land_BagFence_Round_F','Land_BagFence_Round_F','Land_BagFence_Round_F','Land_BagFence_Round_F','Land_BagFence_Round_F','Land_BagFence_Round_F','Land_BagFence_Long_F','Land_BagFence_Long_F','Land_SandbagBarricade_01_half_F','Land_SandbagBarricade_01_half_F','Land_SandbagBarricade_01_half_F','Land_Razorwire_F','Land_Razorwire_F','Land_Razorwire_F','Land_Razorwire_F','Land_CzechHedgehog_01_new_F','Land_CzechHedgehog_01_new_F','Land_CzechHedgehog_01_new_F'],[]]""";
+			};
+			class SectorStaticGunnerTypes: Edit
+			{
+				property="Hz_ambw_module_pSectorStaticGunnerTypes";
+				displayName="Static weapon gunner types";
+				tooltip="";
+				//[[OPFOR],[BLUFOR],[GRNFOR]]
+				defaultValue="""[['CUP_O_TK_Soldier'],['LOP_IA_Infantry_Rifleman_4'],[]]""";
+			};
+			class SectorFlagTypes: Edit
+			{
+				property="Hz_ambw_module_pSectorFlagTypes";
+				displayName="Flag types";
+				tooltip="";
+				//[OPFOR,BLUFOR,GRNFOR]
+				defaultValue="""['FlagCarrierTakistan_EP1','lop_Flag_Iraq_F','FlagCarrierTKMilitia_EP1']""";
+			};
+			class SectorTransportVehicleTypes: Edit
+			{
+				property="Hz_ambw_module_pSectorTransportVehicleTypes";
+				displayName="Transport vehicle types";
+				tooltip="";
+				//[[OPFOR],[BLUFOR],[GRNFOR]]
+				defaultValue="""[['LOP_TKA_Ural', 'CUP_O_V3S_Covered_TKA'],['LOP_IA_Ural'],[]]""";
+			};
+			class SectorCaptureTime: Edit
+			{
+				property="Hz_ambw_module_pSectorCaptureTime";
+				displayName="Sector capture time";
+				tooltip="";
+				defaultValue="""360""";
+			};
+			/////////////////////////////////////////////////////////////////////////
 			
       class ModuleDescription: ModuleDescription {}; // Module description should be shown last
     };

@@ -51,14 +51,14 @@ while {true} do {
 		_side = _sector select 3;
 		if (_side != sideEmpty) then {
 		
-			_nearMen = ((_sector select 0) nearEntities ["CAManBase", (_sector select 1)*4]) select {
+			_nearMen = ((_sector select 0) nearEntities ["CAManBase", _sector select 1]) select {
 				((side _x) == _side)
 				&& {!(_x getVariable ["ACE_isUnconscious",false])}
 				&& {(lifeState _x) != "INCAPACITATED"}
 			};
 			
 			if ((count _nearMen) == 0) then {
-				_nearVics = ((_sector select 0) nearEntities [["LandVehicle", "Ship", "StaticWeapon"], (_sector select 1)*4]) select {
+				_nearVics = ((_sector select 0) nearEntities [["LandVehicle", "Ship", "StaticWeapon"], _sector select 1]) select {
 					((side _x) == _side)
 					&& {
 						(count ((crew _x) select {

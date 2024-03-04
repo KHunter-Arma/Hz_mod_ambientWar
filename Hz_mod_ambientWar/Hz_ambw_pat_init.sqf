@@ -1,5 +1,5 @@
 /*******************************************************************************
-* Copyright (C) 2018-2020 K.Hunter
+* Copyright (C) 2018-2024 K.Hunter
 *
 * This file is licensed under a Creative Commons
 * Attribution-NonCommercial-ShareAlike 4.0 International License.
@@ -9,14 +9,15 @@
 * https://creativecommons.org/licenses/by-nc-sa/4.0/
 *******************************************************************************/
 
-//TODO: module params
-Hz_ambw_pat_lockVehicles = true;
-Hz_ambw_pat_maxNumOfUnits = 160;
-Hz_ambw_pat_factionsBalanceRatio = 0.65;
-Hz_ambw_pat_cleanupLeftoverVehiclesTime = 10800;
-Hz_ambw_pat_cleanupPlayerDist = 2000;
-Hz_ambw_pat_hcName = "HC";
+private _moduleLogic = _this select 0;
 
+// get module params
+Hz_ambw_pat_lockVehicles = _moduleLogic getVariable "LockPatrolVehicles";
+Hz_ambw_pat_maxNumOfUnits = call compile (_moduleLogic getVariable "MaxNumOfUnitsAllowedBeforeSpawningNewPatrol");
+Hz_ambw_pat_factionsBalanceRatio = call compile (_moduleLogic getVariable "PatrolFactionsBalanceRatio");
+Hz_ambw_pat_cleanupLeftoverVehiclesTime = call compile (_moduleLogic getVariable "CleanupLeftoverPatrolVehiclesTime");
+Hz_ambw_pat_cleanupPlayerDist = call compile (_moduleLogic getVariable "PatrolVehicleCleanupMinimumPlayerDistance");
+Hz_ambw_pat_hcName = _moduleLogic getVariable "PatrolsMasterHCName";
 
 Hz_ambw_pat_enableHeadlessClient = false;
 if (isMultiplayer && {Hz_ambw_pat_hcName != ""}) then {
