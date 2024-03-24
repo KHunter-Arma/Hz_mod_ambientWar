@@ -11,7 +11,7 @@ _nearTargets = [];
 [_civ] joinSilent grpNull;
 _civgrp = createGroup civilian;
 [_civ] joinSilent _civgrp;
-_civ setVariable ["Hz_ambw_sideFaction",[civilian,"Civilians"]];
+_civ setVariable ["Hz_ambw_sideFaction",[civilian,"Civilians",1]];
 
 _civ disableAI "AUTOCOMBAT";
 //_civ disableAI "FSM";
@@ -53,7 +53,7 @@ while {alive _civ} do {
 	
 	//_civ enableAI "FSM";
 	_civ setCombatMode "RED";
-	_civ setVariable ["Hz_ambw_sideFaction",[_side,"Civilians"]];
+	_civ setVariable ["Hz_ambw_sideFaction",[_side,"Civilians",0]];
 	
 	//give enough time to "wake up"
 	uisleep 3;
@@ -89,7 +89,7 @@ while {alive _civ} do {
 		[_civ] joinSilent _civgrp;
 		deleteGroup _grp;
 		_civ setunitpos "AUTO";
-		_civ setVariable ["Hz_ambw_sideFaction",[civilian,"Civilians"]];
+		_civ setVariable ["Hz_ambw_sideFaction",[civilian,"Civilians",1]];
 		//_civ disableAI "FSM";
 
 		_civ action ['SwitchWeapon', _civ, _civ, 99];

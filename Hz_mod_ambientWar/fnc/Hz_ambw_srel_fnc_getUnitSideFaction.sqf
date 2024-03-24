@@ -26,6 +26,7 @@ if (!isnil "_sideFaction") then {
 
 	_unitSide = _sideFaction select 0;
 	_unitFaction = _sideFaction select 1;
+	_unitImportance = _sideFaction select 2;
 
 } else {
 

@@ -53,7 +53,7 @@ while {(alive _bomber) && {!_exit}} do {
         _explosives = _this select 1;
         _bomberSide = _this select 2;
 				
-				_bomber setvariable ["Hz_ambw_sideFaction",[_bomberSide,"Civilians"]];	
+				_bomber setvariable ["Hz_ambw_sideFaction",[_bomberSide,"Civilians",1]];	
 
 				dostop _bomber;
 				
