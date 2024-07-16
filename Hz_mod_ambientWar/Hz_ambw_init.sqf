@@ -28,6 +28,7 @@ _this spawn {
 	Hz_ambw_fnc_findSpawnPos = compile preprocessFileLineNumbers (Hz_ambw_functionsPath + "Hz_ambw_fnc_findSpawnPos.sqf");
 	Hz_ambw_fnc_isHeadlessClient = compile preprocessFileLineNumbers (Hz_ambw_functionsPath + "Hz_ambw_fnc_isHeadlessClient.sqf");
 	Hz_ambw_fnc_isUncon = compile preprocessFileLineNumbers (Hz_ambw_functionsPath + "Hz_ambw_fnc_isUncon.sqf");
+	Hz_ambw_fnc_cleanUpBarotraumaObjects = compile preprocessFileLineNumbers (Hz_ambw_functionsPath + "Hz_ambw_fnc_cleanUpBarotraumaObjects.sqf");
 
 	Hz_ambw_enablePersistency = false;
 	if (isClass (configFile >> "cfgPatches" >> "Hz_mod_persistency")) then {

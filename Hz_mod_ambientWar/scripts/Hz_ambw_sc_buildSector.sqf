@@ -368,11 +368,8 @@ _nearFriendlyPlayers = _nearFriendlyPlayers apply {effectiveCommander _x};
 
 if (_exit) exitWith {};
 
-// remove barotrauma bits
-{
-	deleteVehicle _x;
-} foreach (nearestObjects [_sectorPos, ["BloodSplatter_Plane","BloodSplatter_SmallPlane","BloodSplatter_MediumPlane","BloodSplatter_LargePlane","BloodSplatter_SprayPlane","BloodSplatter_SmallSprayPlane","BloodSplatter_LeftHand","BloodSplatter_LeftLowerArm","BloodSplatter_LeftLowerLegAndFoot","BloodSplatter_LeftUpperArm","BloodSplatter_LeftUpperLeg","BloodSplatter_Pelvis","BloodSplatter_RightFoot","BloodSplatter_RightHand","BloodSplatter_RightIndexFinger","BloodSplatter_RightMiddleFinger","BloodSplatter_RightPinkyFinger","BloodSplatter_RightRingFinger","BloodSplatter_RightThumb","BloodSplatter_RightUpperArm","BloodSplatter_RightLowerArm","BloodSplatter_RightUpperLeg","BloodSplatter_RightLowerLeg","BloodSplatter_Torso"], _radius]);
-
+// barotrauma objects don't seem to exist on HCs
+[_sectorPos, _radius] call Hz_ambw_fnc_cleanUpBarotraumaObjects;
 
 private _availableUnits = [];
 
