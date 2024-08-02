@@ -15,6 +15,8 @@ _explosives = _this select 2; // ["MagClass", "AmmoClass"]
 _bomberSide = _this select 3;
 _exit = false;
 
+_bomber setVariable ["Hz_disableFSM", true];
+
 while {(alive _bomber) && {!_exit}} do {
 
   _nearUnits = nearestObjects [_bomber,["CAManBase"],100];
