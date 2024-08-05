@@ -222,6 +222,7 @@ for "_i" from 1 to _num do {
 		
     removeAllWeapons _civ;
     removeAllItems _civ;
+		removeBackpack _civ;
 		_civ unlinkItem "ItemMap";
 		_civ unlinkItem "ItemCompass";
     
@@ -271,8 +272,8 @@ for "_i" from 1 to _num do {
 			
 				if (_prob < (_x select 0)) exitWith {
 				
-					_civ addMagazine (_x select 2);
 					_civ addWeapon (_x select 1);
+					_civ addWeaponItem [_x select 1, _x select 2, true];
 					_civ addMagazines [_x select 2, _x select 3];
 					
 				};
@@ -294,7 +295,8 @@ for "_i" from 1 to _num do {
     _civ allowFleeing 1;
 		
     removeAllWeapons _civ;
-    removeAllItems _civ;     
+    removeAllItems _civ;
+		removeBackpack _civ;
 		_civ unlinkItem "ItemMap";
 		_civ unlinkItem "ItemCompass";
     
