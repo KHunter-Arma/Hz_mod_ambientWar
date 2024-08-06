@@ -479,7 +479,7 @@ class Extended_InitPost_EventHandlers {
 		// compatible with Max Women and TCGM Girls
 		class Hz_ambw_initFemale {
 		
-			init = "private _type = toLower typeOf (_this select 0); if ('max_tak' in _type) then {(_this select 0) setVoice 'Male03PER'; (_this select 0) setPitch 1.1;} else {if (('tcgm_' in _type) || {'woman' in _type}) then {(_this select 0) setVoice 'Male09ENG'; (_this select 0) setPitch 1.1;};};";
+			init = "private _type = toLower typeOf (_this select 0); if ('max_tak' in _type) then {(_this select 0) setSpeaker 'Male03PER'; (_this select 0) setPitch 1.1;} else {if (('tcgm_' in _type) || {'woman' in _type}) then {(_this select 0) setSpeaker 'Male09ENG'; (_this select 0) setPitch 1.1;};};";
 		
 		};
 			
