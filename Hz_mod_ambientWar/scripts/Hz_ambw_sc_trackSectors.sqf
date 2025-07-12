@@ -9,6 +9,8 @@
 * https://creativecommons.org/licenses/by-nc-sa/4.0/
 *******************************************************************************/
 
+scriptName "Hz_abmw_sc_sectorTracker";
+
 if (Hz_ambw_pat_enableHeadlessClient) then {
 	waitUntil {
 		sleep 5;

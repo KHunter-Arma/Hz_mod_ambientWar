@@ -9,7 +9,7 @@
 * https://creativecommons.org/licenses/by-nc-sa/4.0/
 *******************************************************************************/
 
-scriptName "Hz_ambw_srel_handlePositiveRelationsBleed";
+scriptName "Hz_ambw_srel_relationsBleedHandler";
 
 if ((Hz_ambw_srel_positiveRelationsCivilianBleedAmount <= 0)
 		&& {Hz_ambw_srel_positiveRelationsOwnSideBleedAmount <= 0}) exitWith {};
