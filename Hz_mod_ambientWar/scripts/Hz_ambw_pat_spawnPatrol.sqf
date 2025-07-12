@@ -125,7 +125,8 @@ if (_isInfantryGroup) then {
 
 _group setFormation "STAG COLUMN";
 _group setSpeedMode "NORMAL";
-_group setCombatMode "SAFE";
+_group setBehaviour "SAFE";
+_group setCombatMode "YELLOW";
 
 switch (_side) do {
 	case blufor : {

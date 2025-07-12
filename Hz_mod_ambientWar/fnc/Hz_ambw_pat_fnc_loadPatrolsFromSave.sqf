@@ -93,7 +93,8 @@ if ((count Hz_pers_network_ambw_pat_gSides) == 0) exitWith {};
 	
 	_group setFormation "STAG COLUMN";
 	_group setSpeedMode "NORMAL";
-	_group setCombatMode "SAFE";
+	_group setBehaviour "AWARE";
+	_group setCombatMode "YELLOW";
 
 	switch (_side) do {
 		case blufor : {
